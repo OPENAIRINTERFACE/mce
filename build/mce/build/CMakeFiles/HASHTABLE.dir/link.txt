@@ -1,0 +1,2 @@
+/usr/bin/ar qc libHASHTABLE.a  CMakeFiles/HASHTABLE.dir/home/dbeken/Development/oai/mce/src/utils/hashtable/hashtable.c.o CMakeFiles/HASHTABLE.dir/home/dbeken/Development/oai/mce/src/utils/hashtable/hashtable_uint64.c.o CMakeFiles/HASHTABLE.dir/home/dbeken/Development/oai/mce/src/utils/hashtable/obj_hashtable.c.o CMakeFiles/HASHTABLE.dir/home/dbeken/Development/oai/mce/src/utils/hashtable/obj_hashtable_uint64.c.o
+/usr/bin/ranlib libHASHTABLE.a

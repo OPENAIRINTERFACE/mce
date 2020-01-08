@@ -1,0 +1,15 @@
+/home/dbeken/Development/oai/mce/build/mce/build/CMakeFiles/edit_cache.dir
+/home/dbeken/Development/oai/mce/build/mce/build/CMakeFiles/mce.dir
+/home/dbeken/Development/oai/mce/build/mce/build/CMakeFiles/MCE_APP.dir
+/home/dbeken/Development/oai/mce/build/mce/build/CMakeFiles/SCTP_SERVER.dir
+/home/dbeken/Development/oai/mce/build/mce/build/CMakeFiles/GTPV2C.dir
+/home/dbeken/Development/oai/mce/build/mce/build/CMakeFiles/Sm.dir
+/home/dbeken/Development/oai/mce/build/mce/build/CMakeFiles/3GPP_TYPES.dir
+/home/dbeken/Development/oai/mce/build/mce/build/CMakeFiles/UDP_SERVER.dir
+/home/dbeken/Development/oai/mce/build/mce/build/CMakeFiles/M2AP_LIB.dir
+/home/dbeken/Development/oai/mce/build/mce/build/CMakeFiles/ITTI.dir
+/home/dbeken/Development/oai/mce/build/mce/build/CMakeFiles/M2AP_EPC.dir
+/home/dbeken/Development/oai/mce/build/mce/build/CMakeFiles/rebuild_cache.dir
+/home/dbeken/Development/oai/mce/build/mce/build/CMakeFiles/CN_UTILS.dir
+/home/dbeken/Development/oai/mce/build/mce/build/CMakeFiles/BSTR.dir
+/home/dbeken/Development/oai/mce/build/mce/build/CMakeFiles/HASHTABLE.dir

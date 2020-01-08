@@ -1,0 +1,2 @@
+/usr/bin/ar qc libITTI.a  CMakeFiles/ITTI.dir/home/dbeken/Development/oai/mce/src/common/itti/intertask_interface.c.o CMakeFiles/ITTI.dir/home/dbeken/Development/oai/mce/src/common/itti/backtrace.c.o CMakeFiles/ITTI.dir/home/dbeken/Development/oai/mce/src/common/itti/memory_pools.c.o CMakeFiles/ITTI.dir/home/dbeken/Development/oai/mce/src/common/itti/signals.c.o CMakeFiles/ITTI.dir/home/dbeken/Development/oai/mce/src/common/itti/timer.c.o
+/usr/bin/ranlib libITTI.a

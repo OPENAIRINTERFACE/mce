@@ -1,0 +1,2 @@
+/usr/bin/ar qc libSm.a  CMakeFiles/Sm.dir/home/dbeken/Development/oai/mce/src/sm/sm_common.c.o CMakeFiles/Sm.dir/home/dbeken/Development/oai/mce/src/sm/sm_ie_formatter.c.o CMakeFiles/Sm.dir/home/dbeken/Development/oai/mce/src/sm/sm_mce_task.c.o CMakeFiles/Sm.dir/home/dbeken/Development/oai/mce/src/sm/sm_mce_session_manager.c.o
+/usr/bin/ranlib libSm.a
