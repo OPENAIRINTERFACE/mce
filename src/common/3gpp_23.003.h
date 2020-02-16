@@ -147,36 +147,15 @@ typedef uint32_t  tmsi_t;                                  /*!< \brief  Since th
                                                                         (this is because the TMSI must be stored in the SIM, and the SIM uses 4 octets with all bits
                                                                         equal to 1 to indicate that no valid TMSI is available).  */
 
-typedef uint16_t  mme_gid_t;                               /*!< \brief  MME Group ID shall be of 16 bits length. */
-typedef uint8_t   mme_code_t;                              /*!< \brief  MME Code shall be of 8 bits length.      */
+typedef uint16_t  mce_gid_t;                         			 /*!< \brief  Global MCE ID shall be of 16 bits length. */
 
-
-/*! \struct  gummei_t
- * \brief Structure containing the Globally Unique MME Identity.
+/*! \struct  gumcei_t
+ * \brief Structure containing the Globally Unique MCE Identity.
  */
-typedef struct gummei_s {
-  plmn_t      plmn;                                        /*!< \brief  GUMMEI               */
-  mme_gid_t   mme_gid;                                     /*!< \brief  MME group identifier */
-  mme_code_t  mme_code;                                    /*!< \brief  MME code             */
-} gummei_t;
-
-/*! \struct  guti_t
- * \brief Structure containing the Globally Unique Temporary UE Identity.
- */
-typedef struct guti_s {
-  gummei_t gummei;                                         /*!< \brief  Globally Unique MME Identity             */
-  tmsi_t   m_tmsi;                                         /*!< \brief  M-Temporary Mobile Subscriber Identity   */
-} guti_t;
-
-// 2.9 Structure of the S-Temporary Mobile Subscriber Identity (S-TMSI)
-
-/*! \struct  s_tmsi_t
- * \brief Structure of the S-Temporary Mobile Subscriber Identity (S-TMSI).
- */
-typedef struct s_tmsi_s {
-  mme_code_t  mme_code;    /* MME code that allocated the GUTI     */
-  tmsi_t      m_tmsi;      /* M-Temporary Mobile Subscriber Identity   */
-} s_tmsi_t;
+typedef struct gumcei_s {
+  plmn_t      plmn;                                        /*!< \brief  GUMMEI                */
+  mce_gid_t   mce_gid;                                     /*!< \brief  Global MCE identifier */
+} gumcei_t;
 
 //==============================================================================
 // 3 Numbering plan for mobile stations
@@ -428,15 +407,5 @@ typedef struct ecgi_s {
 // 21 Addressing and Identification for Dual Stack Mobile IPv6 (DSMIPv6)
 // 22 Addressing and identification for ANDSF
 // 23 Numbering, addressing and identification for the Relay Node OAM System
-
-
-/* Clear GUTI without free it */
-void clear_guti(guti_t * const guti);
-/* Clear IMSI without free it */
-void clear_imsi(imsi_t * const imsi);
-/* Clear IMEI without free it */
-void clear_imei(imei_t * const imei);
-/* Clear IMEISV without free it */
-void clear_imeisv(imeisv_t * const imeisv);
 
 #endif /* FILE_3GPP_23_003_SEEN */

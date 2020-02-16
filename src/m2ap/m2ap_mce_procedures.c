@@ -74,7 +74,7 @@ static int m2ap_generate_mbms_scheduling_information(const m2ap_enb_description_
 //------------------------------------------------------------------------------
 void
 m2ap_handle_mbms_session_start_request (
-  const itti_m3ap_mbms_session_start_req_t * const mbms_session_start_req_pP)
+  const itti_m2ap_mbms_session_start_req_t * const mbms_session_start_req_pP)
 {
   /*
    * MBMS-GW triggers a new MBMS Service. No eNBs are specified but only the MBMS service area.
@@ -109,8 +109,8 @@ m2ap_handle_mbms_session_start_request (
   }
   /** Check that there exists at least a single eNB with the MBMS Service Area (we don't start MBMS sessions for eNBs which later on connected). */
   mce_config_read_lock (&mce_config);
-  m2ap_enb_description_t *			         m2ap_enb_p_elements[mce_config.mbms.max_m2_enbs];
-  memset(m2ap_enb_p_elements, 0, (sizeof(m2ap_enb_description_t*) * mce_config.mbms.max_m2_enbs));
+  m2ap_enb_description_t *			         m2ap_enb_p_elements[mce_config.max_m2_enbs];
+  memset(m2ap_enb_p_elements, 0, (sizeof(m2ap_enb_description_t*) * mce_config.max_m2_enbs));
   mce_config_unlock (&mce_config);
   m2ap_is_mbms_sai_in_list(mbms_session_start_req_pP->mbms_service_area_id, &num_m2ap_enbs, (m2ap_enb_description_t **)m2ap_enb_p_elements);
   if(!num_m2ap_enbs){
@@ -148,13 +148,13 @@ m2ap_handle_mbms_session_start_request (
   			delta_to_start_sec, TMGI_ARG(&mbms_session_start_req_pP->tmgi), mbms_session_start_req_pP->mbms_service_area_id);
   	// todo: calculate delta for usec
   	if (timer_setup (delta_to_start_sec, mbms_session_start_req_pP->abs_start_time_usec,
-           TASK_M2AP, INSTANCE_DEFAULT, TIMER_ONE_SHOT, (void*)mce_mbms_m2ap_id, &(mbms_ref->m2ap_action_timer.id)) < 0) {
+           TASK_M2AP, INSTANCE_DEFAULT, TIMER_ONE_SHOT, (void*)mce_mbms_m2ap_id, &(mbms_ref->mxap_action_timer.id)) < 0) {
       OAILOG_ERROR (LOG_M2AP, "Failed to start MBMS Session Start timer for MBMS with MBMS M2AP MCE ID " MCE_MBMS_M2AP_ID_FMT". \n", mce_mbms_m2ap_id);
-      mbms_ref->m2ap_action_timer.id = M2AP_TIMER_INACTIVE_ID;
+      mbms_ref->mxap_action_timer.id = MxAP_TIMER_INACTIVE_ID;
       /** Send immediately. */
     } else {
       OAILOG_DEBUG (LOG_M2AP, "Started M2AP MBMS Session start timer (timer id 0x%lx) for MBMS Session MBMS M2AP MCE ID " MCE_MBMS_M2AP_ID_FMT". "
-    		  "Waiting for timeout to trigger M2AP Session Start to M2AP eNBs.\n", mbms_ref->m2ap_action_timer.id, mce_mbms_m2ap_id);
+    		  "Waiting for timeout to trigger M2AP Session Start to M2AP eNBs.\n", mbms_ref->mxap_action_timer.id, mce_mbms_m2ap_id);
       /** Leave the method. */
       OAILOG_FUNC_OUT(LOG_M2AP);
     }
@@ -171,7 +171,7 @@ m2ap_handle_mbms_session_start_request (
 //------------------------------------------------------------------------------
 void
 m2ap_handle_mbms_session_update_request (
-  const itti_m3ap_mbms_session_update_req_t * const mbms_session_update_req_pP)
+  const itti_m2ap_mbms_session_update_req_t * const mbms_session_update_req_pP)
 {
   /*
    * MBMS-GW triggers the stop of an MBMS Service on all the eNBs which are receiving it.
@@ -207,8 +207,8 @@ m2ap_handle_mbms_session_update_request (
    * If not, directly remove the MBMS description.
    */
   mce_config_read_lock (&mce_config);
-  m2ap_enb_description_t *			         m2ap_enb_p_elements[mce_config.mbms.max_m2_enbs];
-  memset(m2ap_enb_p_elements, 0, (sizeof(m2ap_enb_description_t*) * mce_config.mbms.max_m2_enbs));
+  m2ap_enb_description_t *			         m2ap_enb_p_elements[mce_config.max_m2_enbs];
+  memset(m2ap_enb_p_elements, 0, (sizeof(m2ap_enb_description_t*) * mce_config.max_m2_enbs));
   mce_config_unlock (&mce_config);
   m2ap_is_mbms_sai_in_list(mbms_session_update_req_pP->new_mbms_service_area_id, &num_m2ap_enbs_new_mbms_sai,
 		  (m2ap_enb_description_t **)m2ap_enb_p_elements);
@@ -224,7 +224,7 @@ m2ap_handle_mbms_session_update_request (
    */
 
   mce_config_read_lock (&mce_config);
-  memset(m2ap_enb_p_elements, 0, (sizeof(m2ap_enb_description_t*) * mce_config.mbms.max_m2_enbs));
+  memset(m2ap_enb_p_elements, 0, (sizeof(m2ap_enb_description_t*) * mce_config.max_m2_enbs));
   mce_config_unlock (&mce_config);
   int num_m2ap_enbs_missing_new_mbms_sai = 0;
   m2ap_is_mbms_sai_not_in_list(mbms_session_update_req_pP->new_mbms_service_area_id, &num_m2ap_enbs_missing_new_mbms_sai, (m2ap_enb_description_t **)&m2ap_enb_p_elements);
@@ -254,13 +254,13 @@ m2ap_handle_mbms_session_update_request (
     OAILOG_INFO (LOG_M2AP, "M2AP:MBMS Session Update Request- Received a timer of (%d)s for start of TMGI " TMGI_FMT " and MBMS Service Area ID "MBMS_SERVICE_AREA_ID_FMT". \n",
     	delta_to_update_sec, TMGI_ARG(&mbms_session_update_req_pP->tmgi), mbms_session_update_req_pP->new_mbms_service_area_id);
     if (timer_setup (delta_to_update_sec, mbms_session_update_req_pP->abs_update_time_usec,
-           TASK_M2AP, INSTANCE_DEFAULT, TIMER_ONE_SHOT, (void*)mbms_ref->mce_mbms_m2ap_id, &(mbms_ref->m2ap_action_timer.id)) < 0) {
+           TASK_M2AP, INSTANCE_DEFAULT, TIMER_ONE_SHOT, (void*)mbms_ref->mce_mbms_m2ap_id, &(mbms_ref->mxap_action_timer.id)) < 0) {
          OAILOG_ERROR (LOG_M2AP, "Failed to start MBMS Session Update timer for MBMS with MBMS M2AP MCE ID " MCE_MBMS_M2AP_ID_FMT". \n", mbms_ref->mce_mbms_m2ap_id);
-         mbms_ref->m2ap_action_timer.id = M2AP_TIMER_INACTIVE_ID;
+         mbms_ref->mxap_action_timer.id = MxAP_TIMER_INACTIVE_ID;
          /** Send immediately. */
        } else {
          OAILOG_DEBUG (LOG_M2AP, "Started M2AP MBMS Session Update timer (timer id 0x%lx) for MBMS Session MBMS M2AP MCE ID " MCE_MBMS_M2AP_ID_FMT". "
-        		 "Waiting for timeout to trigger M2AP Session Update to M2AP eNBs.\n", mbms_ref->m2ap_action_timer.id, mbms_ref->mce_mbms_m2ap_id);
+        		 "Waiting for timeout to trigger M2AP Session Update to M2AP eNBs.\n", mbms_ref->mxap_action_timer.id, mbms_ref->mce_mbms_m2ap_id);
          /** Leave the method. */
          OAILOG_FUNC_OUT(LOG_M2AP);
        }
@@ -302,8 +302,8 @@ m2ap_handle_mbms_session_stop_request (
   if(inform_enbs) {
     /** Check that there exists at least a single eNB with the MBMS Service Area (we don't start MBMS sessions for eNBs which later on connected). */
   	mce_config_read_lock (&mce_config);
-  	m2ap_enb_description_t *			         m2ap_enb_p_elements[mce_config.mbms.max_m2_enbs];
-  	memset(m2ap_enb_p_elements, 0, (sizeof(m2ap_enb_description_t*) * mce_config.mbms.max_m2_enbs));
+  	m2ap_enb_description_t *			         m2ap_enb_p_elements[mce_config.max_m2_enbs];
+  	memset(m2ap_enb_p_elements, 0, (sizeof(m2ap_enb_description_t*) * mce_config.max_m2_enbs));
   	mce_config_unlock (&mce_config);
   	int num_m2ap_enbs = 0;
   	m2ap_is_mbms_sai_in_list(mbms_service_area_id, &num_m2ap_enbs, (m2ap_enb_description_t **)m2ap_enb_p_elements);
@@ -414,7 +414,7 @@ m2ap_mce_handle_mbms_action_timer_expiry (void *arg)
 
   mbms_description_t *mbms_ref_p  =        (mbms_description_t *)arg;
 
-  mbms_ref_p->m2ap_action_timer.id = M2AP_TIMER_INACTIVE_ID;
+  mbms_ref_p->mxap_action_timer.id = MxAP_TIMER_INACTIVE_ID;
   OAILOG_DEBUG (LOG_M2AP, "Expired- MBMS Action timer MCE MBMS M2AP " MCE_MBMS_M2AP_ID_FMT" . \n", mbms_ref_p->mce_mbms_m2ap_id);
 
   /**
@@ -427,8 +427,8 @@ m2ap_mce_handle_mbms_action_timer_expiry (void *arg)
     uint8_t								  num_m2ap_enbs = 0;
     /** Get the list of eNBs of the matching service area. */
     mce_config_read_lock (&mce_config);
-    m2ap_enb_description_t *			         m2ap_enb_p_elements[mce_config.mbms.max_m2_enbs];
-    memset(m2ap_enb_p_elements, 0, (sizeof(m2ap_enb_description_t*) * mce_config.mbms.max_m2_enbs));
+    m2ap_enb_description_t *			         m2ap_enb_p_elements[mce_config.max_m2_enbs];
+    memset(m2ap_enb_p_elements, 0, (sizeof(m2ap_enb_description_t*) * mce_config.max_m2_enbs));
     mce_config_unlock (&mce_config);
 
     m2ap_is_mbms_sai_in_list(mbms_ref_p->mbms_service_area_id, &num_m2ap_enbs, (m2ap_enb_description_t **)m2ap_enb_p_elements);
@@ -447,22 +447,22 @@ m2ap_mce_handle_mbms_action_timer_expiry (void *arg)
 }
 
 //------------------------------------------------------------------------------
-int m2ap_handle_m3ap_mbms_scheduling_info(itti_m3ap_mbms_scheduling_info_t * m3ap_mbms_scheduling_info){
+int m2ap_handle_m2ap_mbms_scheduling_info(itti_m2ap_mbms_scheduling_info_t * m2ap_mbms_scheduling_info){
 	OAILOG_FUNC_IN(LOG_M2AP);
 	int																		 rc = RETURNerror;
   /** Iterate through the MBSFN clusters. The M2AP eNB associations here should have an MBSFN Id. */
-  for(int num_mbms_area = 0; num_mbms_area < (MME_CONFIG_MAX_LOCAL_MBMS_SERVICE_AREAS + 1); num_mbms_area++){
+  for(int num_mbms_area = 0; num_mbms_area < (MCE_CONFIG_MAX_LOCAL_MBMS_SERVICE_AREAS + 1); num_mbms_area++){
   	/** Take a cluster: Check if eNBs exist for the MBMS area. */
     /** Check if anything is scheduled for the MBMS area. */
-    if(!m3ap_mbms_scheduling_info->mbsfn_cluster[num_mbms_area].num_mbsfn_areas){
+    if(!m2ap_mbms_scheduling_info->mbsfn_cluster[num_mbms_area].num_mbsfn_areas){
     	OAILOG_DEBUG(LOG_M2AP, "No MBSFN areas scheduled for for MBMS area (%d). Skipping.. \n", num_mbms_area);
     	continue;
     }
   	uint8_t num_m2_enb_mbms_area = 0;
   	mce_config_read_lock (&mce_config);
-    m2ap_enb_description_t *			         m2ap_enb_p_elements[mce_config.mbms.max_m2_enbs];
-    memset(m2ap_enb_p_elements, 0, (sizeof(m2ap_enb_description_t*) * mce_config.mbms.max_m2_enbs));
-    uint8_t local_global_active = mce_config.mbms.mbms_global_mbsfn_area_per_local_group;
+    m2ap_enb_description_t *			         m2ap_enb_p_elements[mce_config.max_m2_enbs];
+    memset(m2ap_enb_p_elements, 0, (sizeof(m2ap_enb_description_t*) * mce_config.max_m2_enbs));
+    uint8_t local_global_active = mce_config.mbms_global_mbsfn_area_per_local_group;
     mce_config_unlock (&mce_config);
     m2ap_is_mbms_area_list(num_mbms_area, &num_m2_enb_mbms_area, (m2ap_enb_description_t**)m2ap_enb_p_elements);
     if(!num_m2_enb_mbms_area){
@@ -475,9 +475,9 @@ int m2ap_handle_m3ap_mbms_scheduling_info(itti_m3ap_mbms_scheduling_info_t * m3a
      * Create the MBMS Scheduling message for the eNBs.
      */
     if(m2ap_mbms_scheduling_cluster(num_m2_enb_mbms_area, (m2ap_enb_description_t**)m2ap_enb_p_elements, num_mbms_area,
-    		(num_mbms_area && local_global_active) ? NULL : &m3ap_mbms_scheduling_info->mbsfn_cluster[0],
-    				num_mbms_area ? &m3ap_mbms_scheduling_info->mbsfn_cluster[num_mbms_area] : NULL,
-				m3ap_mbms_scheduling_info->mcch_rep_abs_rf) == RETURNerror)
+    		(num_mbms_area && local_global_active) ? NULL : &m2ap_mbms_scheduling_info->mbsfn_cluster[0],
+    				num_mbms_area ? &m2ap_mbms_scheduling_info->mbsfn_cluster[num_mbms_area] : NULL,
+				m2ap_mbms_scheduling_info->mcch_rep_abs_rf) == RETURNerror)
     {
     	DevMessage("Could not generate MBMS scheduling information for MBMS area " + num_mbms_area);
     }
@@ -502,8 +502,8 @@ void m2ap_update_mbms_service_context(const mce_mbms_m2ap_id_t mce_mbms_m2ap_id)
 
   /** Check that there exists at least a single eNB with the MBMS Service Area (we don't start MBMS sessions for eNBs which later on connected). */
   mce_config_read_lock (&mce_config);
-  m2ap_enb_description_t *			         new_mbms_sai_m2ap_enb_p_elements[mce_config.mbms.max_m2_enbs];
-  memset(new_mbms_sai_m2ap_enb_p_elements, 0, (sizeof(m2ap_enb_description_t*) * mce_config.mbms.max_m2_enbs));
+  m2ap_enb_description_t *			         new_mbms_sai_m2ap_enb_p_elements[mce_config.max_m2_enbs];
+  memset(new_mbms_sai_m2ap_enb_p_elements, 0, (sizeof(m2ap_enb_description_t*) * mce_config.max_m2_enbs));
   mce_config_unlock (&mce_config);
 
   mbms_ref = m2ap_is_mbms_mce_m2ap_id_in_list(mce_mbms_m2ap_id); /**< Nothing eNB specific. */
@@ -519,8 +519,8 @@ void m2ap_update_mbms_service_context(const mce_mbms_m2ap_id_t mce_mbms_m2ap_id)
    * We should have removed (stopped the MBMS Session) in the eNBs, which don't support the MBMS Service Area ID before.
    */
   mce_config_read_lock (&mce_config);
-  m2ap_enb_description_t *			         m2ap_enb_p_elements[mce_config.mbms.max_m2_enbs];
-  memset(m2ap_enb_p_elements, 0, (sizeof(m2ap_enb_description_t*) * mce_config.mbms.max_m2_enbs));
+  m2ap_enb_description_t *			         m2ap_enb_p_elements[mce_config.max_m2_enbs];
+  memset(m2ap_enb_p_elements, 0, (sizeof(m2ap_enb_description_t*) * mce_config.max_m2_enbs));
   mce_config_unlock (&mce_config);
   m2ap_is_mbms_sai_in_list(mbms_ref->mbms_service_area_id, &num_m2ap_enbs_new_mbms_sai, (m2ap_enb_description_t **)m2ap_enb_p_elements);
   if(!num_m2ap_enbs_new_mbms_sai){
@@ -584,7 +584,7 @@ int m2ap_mbms_scheduling_cluster(const uint8_t num_m2_enb_mbms_area, const m2ap_
 		memset((void*)mbsfn_area_cfgs_pP, 0, MAX_MBMSFN_AREAS * sizeof(mbsfn_areas_t*));
 		for(int num_mbsfn_area_m2_enb = 0; num_mbsfn_area_m2_enb < m2_enb_description->mbsfn_area_ids.num_mbsfn_area_ids; num_mbsfn_area_m2_enb++){
 			/** Collect the scheduling data for the MBSFN area from the global list. No need to check local/global flag. */
-			if(m2_enb_description->local_mbms_area == 0 || !mce_config.mbms.mbms_global_mbsfn_area_per_local_group){
+			if(m2_enb_description->local_mbms_area == 0 || !mce_config.mbms_global_mbsfn_area_per_local_group){
 				if(mbsfn_cluster_global){
 					/** Search the global areas. */
 					for(int num_scheduled_mbsfn_area = 0; num_scheduled_mbsfn_area < mbsfn_cluster_global->num_mbsfn_areas; num_scheduled_mbsfn_area++){

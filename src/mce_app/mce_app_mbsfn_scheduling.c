@@ -463,7 +463,7 @@ static void mce_app_calculate_csa_common_pattern(	const mbsfn_area_ids_t							*
 
 	/** Assert that the local-global flag is NOT set in the MME config. */
 	mce_config_read_lock (&mce_config);
-	if(mce_config.mbms.mbms_global_mbsfn_area_per_local_group){
+	if(mce_config.mbms_global_mbsfn_area_per_local_group){
 		if(nlglobal_mbsfn_area_ids && local_mbsfn_area_ids){
 			DevMessage("If local-global flag is set, we cannot have an MBSFN cluster with local and nl-global MBSFN areas.");
 		}
@@ -944,7 +944,7 @@ void mce_app_allocate_4frame(struct csa_patterns_s * new_csa_patterns, int * num
 	// todo: >75% is variable, just a threshold where we consider allocating a 4RF pattern. What could be any other reason?
 	/** 16 Radio Frames are the minimum radio frames allocated with a /32 periodicity. */
 	mce_config_read_lock(&mce_config);
-	int csa_4_frame_rfs_repetition = floor((double)(*num_radio_frames_p * mce_config.mbms.mbsfn_csa_4_rf_threshold) / ((MBMS_CSA_PERIOD_GCS_AS_RF/get_csa_rf_alloc_period_rf(CSA_RF_ALLOC_PERIOD_RF32)) * CSA_FOUR_FRAME));
+	int csa_4_frame_rfs_repetition = floor((double)(*num_radio_frames_p * mce_config.mbsfn_csa_4_rf_threshold) / ((MBMS_CSA_PERIOD_GCS_AS_RF/get_csa_rf_alloc_period_rf(CSA_RF_ALLOC_PERIOD_RF32)) * CSA_FOUR_FRAME));
 	mce_config_unlock(&mce_config);
 
 	if(!csa_4_frame_rfs_repetition) {

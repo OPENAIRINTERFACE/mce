@@ -42,6 +42,26 @@ void mce_app_itti_sm_mbms_session_update_response(teid_t mme_sm_teid, teid_t mbm
 /** MBMS Session Stop Request. */
 void mce_app_itti_sm_mbms_session_stop_response(teid_t mme_sm_teid, teid_t mbms_sm_teid, struct sockaddr *mbms_ip_address, void *trxn,  gtpv2c_cause_value_t gtpv2cCause);
 
+/** M2AP Session Start Request. */
+void mce_app_itti_m2ap_mbms_session_start_request(tmgi_t * tmgi, mbms_service_area_id_t mbms_service_area_id,
+  bearer_qos_t * mbms_bearer_qos, mbms_ip_multicast_distribution_t * mbms_ip_mc_dist, const uint32_t abs_start_time_sec, const uint32_t abs_start_time_usec);
+
+/** M2AP Session Update Request. */
+void mce_app_itti_m2ap_mbms_session_update_request(tmgi_t * tmgi, const mbms_service_area_id_t new_mbms_service_area_id, const mbms_service_area_id_t old_mbms_service_area_id,
+  bearer_qos_t * mbms_bearer_qos, mbms_ip_multicast_distribution_t * mbms_ip_mc_dist, const uint32_t abs_update_time_sec, const uint32_t abs_update_time_usec);
+
+/** M2AP Session Stop Request. */
+void mce_app_itti_m2ap_mbms_session_stop_request(tmgi_t * tmgi, mbms_service_area_id_t mbms_sa_id, const bool inform_enbs);
+
+/** M2AP eNB Response. */
+void mce_app_itti_m2ap_enb_setup_response(mbsfn_areas_t * mbsfn_areas_p, uint8_t local_mbms_area, uint32_t m2ap_enb_id, sctp_assoc_id_t assoc_id);
+
+/** M3AP MBMS Scheduling Information */
+void mce_app_itti_m3ap_send_mbms_scheduling_info(const mbsfn_areas_t* const mbsfn_areas_p, const uint8_t max_mbms_areas, const long mcch_rep_abs_rf);
+
+/**
+ * M3 PART (playing MME)
+ */
 /** M3AP Session Start Request. */
 void mce_app_itti_m3ap_mbms_session_start_request(tmgi_t * tmgi, mbms_service_area_id_t mbms_service_area_id,
   bearer_qos_t * mbms_bearer_qos, mbms_ip_multicast_distribution_t * mbms_ip_mc_dist, const uint32_t abs_start_time_sec, const uint32_t abs_start_time_usec);
@@ -51,12 +71,9 @@ void mce_app_itti_m3ap_mbms_session_update_request(tmgi_t * tmgi, const mbms_ser
   bearer_qos_t * mbms_bearer_qos, mbms_ip_multicast_distribution_t * mbms_ip_mc_dist, const uint32_t abs_update_time_sec, const uint32_t abs_update_time_usec);
 
 /** M3AP Session Stop Request. */
-void mce_app_itti_m3ap_mbms_session_stop_request(tmgi_t * tmgi, mbms_service_area_id_t mbms_sa_id, const bool inform_enbs);
+void mce_app_itti_m3ap_mbms_session_stop_request(tmgi_t * tmgi, mbms_service_area_id_t mbms_sa_id, const bool inform_mces);
 
-/** M2AP eNB Response. */
-void mce_app_itti_m3ap_enb_setup_response(mbsfn_areas_t * mbsfn_areas_p, uint8_t local_mbms_area, uint32_t m2ap_enb_id, sctp_assoc_id_t assoc_id);
-
-/** M3AP MBMS Scheduling Information */
-void mce_app_itti_m3ap_send_mbms_scheduling_info(const mbsfn_areas_t* const mbsfn_areas_p, const uint8_t max_mbms_areas, const long mcch_rep_abs_rf);
+/** M3AP MCE Response. */
+void mce_app_itti_m3ap_mce_setup_response(mbsfn_areas_t * mbsfn_areas_p, uint8_t local_mbms_area, uint32_t m3ap_global_mce_id, sctp_assoc_id_t assoc_id);
 
 #endif /* FILE_MCE_APP_ITTI_MESSAGING_SEEN */

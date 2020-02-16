@@ -3,22 +3,16 @@ add_definitions("-DPACKAGE_NAME=\"MCE\"")
 # set in parent CMakeLists.txt: add_definitions("-DPACKAGE_VERSION=\"0.1\"")
 # set in parent CMakeLists.txt: add_definitions("-DPACKAGE_BUGREPORT=\"TBD\"")
 
-# Dependencies
-pkg_search_module(OPENSSL openssl REQUIRED)
-include_directories(${OPENSSL_INCLUDE_DIRS})
-
-pkg_search_module(CRYPTO libcrypto REQUIRED)
-include_directories(${CRYPTO_INCLUDE_DIRS})
-
-
 set(ASN1RELDIR r10.5)
 include_directories(${SRC_TOP_DIR}/common)
 include_directories(${SRC_TOP_DIR}/common/itti)
 include_directories(${SRC_TOP_DIR}/common/message_utils)
 include_directories(${CMAKE_BINARY_DIR}/m2ap/${ASN1RELDIR})
+include_directories(${CMAKE_BINARY_DIR}/m3ap/${ASN1RELDIR})
 include_directories(${SRC_TOP_DIR}/gtpv2-c/gtpv2c_ie_formatter/shared)
 include_directories(${SRC_TOP_DIR}/secu)
 include_directories(${SRC_TOP_DIR}/m2ap)
+include_directories(${SRC_TOP_DIR}/m3ap)
 include_directories(${SRC_TOP_DIR}/utils)
 include_directories(${SRC_TOP_DIR}/utils/bstr)
 include_directories(${SRC_TOP_DIR}/utils/hashtable)
@@ -29,6 +23,8 @@ include_directories(${SRC_TOP_DIR}/mce)
 include_directories("${SRC_TOP_DIR}/mce_app")
 include_directories("${SRC_TOP_DIR}/m2ap/messages/asn1/${ASN1RELDIR}")
 include_directories("${SRC_TOP_DIR}/m2ap")
+include_directories("${SRC_TOP_DIR}/m3ap/messages/asn1/${ASN1RELDIR}")
+include_directories("${SRC_TOP_DIR}/m3ap")
 include_directories("${SRC_TOP_DIR}/sm") 
 add_library(MCE_APP
     mce_app_mbms_service.c
@@ -58,10 +54,9 @@ add_executable(mce
 
 target_link_libraries (mce
     -Wl,--start-group
-    M2AP_LIB M2AP_EPC M2AP Sm GTPV2C SCTP_SERVER UDP_SERVER SECU_CN MCE_APP
+    M2AP_LIB M2AP_EPC M3AP_LIB M3AP_EPC M2AP M3AP Sm GTPV2C SCTP_SERVER UDP_SERVER SECU_CN MCE_APP
             ${MSC_LIB} ITTI  3GPP_TYPES CN_UTILS
             HASHTABLE BSTR
     -Wl,--end-group
-    pthread m sctp  rt crypt ${LFDS} ${CRYPTO_LIBRARIES} ${OPENSSL_LIBRARIES}
-      ${NETTLE_LIBRARIES} ${CONFIG_LIBRARIES} gnutls fdproto fdcore 
+    pthread m sctp  rt crypt ${LFDS} ${NETTLE_LIBRARIES} ${CONFIG_LIBRARIES} gnutls 
     )

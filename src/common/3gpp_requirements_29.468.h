@@ -39,9 +39,9 @@
 #include "3gpp_requirements.h"
 #include "log.h"
 
-#define REQUIREMENT_3GPP_29_468(rElEaSe_sEcTiOn__OaImark) REQUIREMENT_3GPP_SPEC(LOG_NAS, "Hit 3GPP TS 29_468"#rElEaSe_sEcTiOn__OaImark" : "rElEaSe_sEcTiOn__OaImark##_BRIEF"\n")
-#define NO_REQUIREMENT_3GPP_29_468(rElEaSe_sEcTiOn__OaImark) REQUIREMENT_3GPP_SPEC(LOG_NAS, "#NOT IMPLEMENTED 3GPP TS 29_468"#rElEaSe_sEcTiOn__OaImark" : "rElEaSe_sEcTiOn__OaImark##_BRIEF"\n")
-#define NOT_REQUIREMENT_3GPP_29_468(rElEaSe_sEcTiOn__OaImark) REQUIREMENT_3GPP_SPEC(LOG_NAS, "#NOT ASSERTED 3GPP TS 29_468"#rElEaSe_sEcTiOn__OaImark" : "rElEaSe_sEcTiOn__OaImark##_BRIEF"\n")
+#define REQUIREMENT_3GPP_29_468(rElEaSe_sEcTiOn__OaImark) REQUIREMENT_3GPP_SPEC(LOG_MCE_APP, "Hit 3GPP TS 29_468"#rElEaSe_sEcTiOn__OaImark" : "rElEaSe_sEcTiOn__OaImark##_BRIEF"\n")
+#define NO_REQUIREMENT_3GPP_29_468(rElEaSe_sEcTiOn__OaImark) REQUIREMENT_3GPP_SPEC(LOG_MCE_APP, "#NOT IMPLEMENTED 3GPP TS 29_468"#rElEaSe_sEcTiOn__OaImark" : "rElEaSe_sEcTiOn__OaImark##_BRIEF"\n")
+#define NOT_REQUIREMENT_3GPP_29_468(rElEaSe_sEcTiOn__OaImark) REQUIREMENT_3GPP_SPEC(LOG_MCE_APP, "#NOT ASSERTED 3GPP TS 29_468"#rElEaSe_sEcTiOn__OaImark" : "rElEaSe_sEcTiOn__OaImark##_BRIEF"\n")
 
 //-----------------------------------------------------------------------------------------------------------------------
 // Modify MBMS Bearer Procedure

@@ -1,0 +1,512 @@
+[  1%] Built target ITTI
+Scanning dependencies of target MCE_APP
+[  1%] Building C object CMakeFiles/MCE_APP.dir/home/dbeken/Development/blackned/mce/src/mce_app/mce_app_main.c.o
+[ 46%] Built target M2AP_LIB
+[ 79%] Built target M3AP_LIB
+[ 81%] Built target Sm
+[ 81%] Built target UDP_SERVER
+[ 82%] Built target BSTR
+[ 85%] Built target CN_UTILS
+In file included from /home/dbeken/Development/blackned/mce/src/common/sm_messages_types.h:34:0,
+                 from /home/dbeken/Development/blackned/mce/src/common/messages_types.h:30,
+                 from /home/dbeken/Development/blackned/mce/src/common/itti/intertask_interface_types.h:56,
+                 from /home/dbeken/Development/blackned/mce/src/common/itti/intertask_interface.h:39,
+                 from /home/dbeken/Development/blackned/mce/src/mce_app/mce_app_main.c:41:
+/home/dbeken/Development/blackned/mce/src/common/common_types_mbms.h:225:1: warning: multi-line comment [-Wcomment]
+ //X(ENB_TYPE_TDD) \
+ ^
+In file included from /home/dbeken/Development/blackned/mce/src/mce_app/mce_config.h:37:0,
+                 from /home/dbeken/Development/blackned/mce/src/mce_app/mce_app_main.c:43:
+/home/dbeken/Development/blackned/mce/src/common/common_types_mbms.h:225:1: warning: multi-line comment [-Wcomment]
+ //X(ENB_TYPE_TDD) \
+ ^
+In file included from /home/dbeken/Development/blackned/mce/src/mce_app/mce_app_defs.h:38:0,
+                 from /home/dbeken/Development/blackned/mce/src/mce_app/mce_app_main.c:47:
+/home/dbeken/Development/blackned/mce/src/mce_app/mce_app_mbms_service_context.h:54:0: warning: "MBMS_SERVICE_ID_DIGITS" redefined
+ #define MBMS_SERVICE_ID_DIGITS 6
+ 
+In file included from /home/dbeken/Development/blackned/mce/src/common/3gpp_24.008.h:34:0,
+                 from /home/dbeken/Development/blackned/mce/src/common/common_types.h:36,
+                 from /home/dbeken/Development/blackned/mce/src/common/../mce/mce_ie_defs.h:32,
+                 from /home/dbeken/Development/blackned/mce/src/common/sm_messages_types.h:33,
+                 from /home/dbeken/Development/blackned/mce/src/common/messages_types.h:30,
+                 from /home/dbeken/Development/blackned/mce/src/common/itti/intertask_interface_types.h:56,
+                 from /home/dbeken/Development/blackned/mce/src/common/itti/intertask_interface.h:39,
+                 from /home/dbeken/Development/blackned/mce/src/mce_app/mce_app_main.c:41:
+/home/dbeken/Development/blackned/mce/src/common/3gpp_23.003.h:355:0: note: this is the location of the previous definition
+ #define MBMS_SERVICE_ID_DIGITS              3
+ 
+In file included from /home/dbeken/Development/blackned/mce/src/mce_app/mce_app_defs.h:38:0,
+                 from /home/dbeken/Development/blackned/mce/src/mce_app/mce_app_main.c:47:
+/home/dbeken/Development/blackned/mce/src/mce_app/mce_app_mbms_service_context.h:231:107: warning: duplicate ‘const’ declaration specifier [-Wduplicate-decl-specifier]
+ struct mbms_service_s * mce_register_mbms_service(const tmgi_t * const tmgi, const mbms_service_area_id_t const mbms_service_area_id, const teid_t mme_sm_teid);
+                                                                                                           ^~~~~
+[ 86%] Built target HASHTABLE
+[ 88%] Built target GTPV2C
+In file included from /home/dbeken/Development/blackned/mce/src/mce_app/mce_app_main.c:39:0:
+/home/dbeken/Development/blackned/mce/src/mce_app/mce_app_main.c: In function ‘mce_app_thread’:
+/home/dbeken/Development/blackned/mce/src/mce_app/mce_app_main.c:157:37: warning: format ‘%x’ expects argument of type ‘unsigned int’, but argument 7 has type ‘mbms_service_index_t {aka long unsigned int}’ [-Wformat=]
+        OAILOG_WARNING (LOG_MCE_APP, "Timer expired but no associated MBMS Service for MBMS Service idx " MBMS_SERVICE_INDEX_FMT "\n", mbms_service_idx);
+                                     ^
+/home/dbeken/Development/blackned/mce/src/utils/log.h:276:148: note: in definition of macro ‘OAILOG_WARNING’
+ #    define OAILOG_WARNING(pRoTo, ...)                                  do { log_message(NULL, OAILOG_LEVEL_WARNING,  pRoTo, __FILE__, __LINE__, ##__VA_ARGS__); } while(0) /*!< \brief warning conditions */
+                                                                                                                                                    ^~~~~~~~~~~
+In file included from /home/dbeken/Development/blackned/mce/src/common/./itti/assertions.h:25:0,
+                 from /home/dbeken/Development/blackned/mce/src/common/assertions.h:31,
+                 from /home/dbeken/Development/blackned/mce/src/mce_app/mce_app_main.c:40:
+/usr/include/inttypes.h:120:19: note: format string is defined here
+ # define PRIx32  "x"
+In file included from /home/dbeken/Development/blackned/mce/src/mce_app/mce_app_main.c:39:0:
+/home/dbeken/Development/blackned/mce/src/mce_app/mce_app_main.c:161:37: warning: format ‘%u’ expects argument of type ‘unsigned int’, but argument 7 has type ‘long int’ [-Wformat=]
+        OAILOG_WARNING (LOG_MCE_APP, "TIMER_HAS_EXPIRED with ID %u and FOR MBMS Service with TMGI " TMGI_FMT ". \n",
+                                     ^
+          received_message_p->ittiMsg.timer_has_expired.timer_id, TMGI_ARG(&mbms_service->privates.fields.tmgi));
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/dbeken/Development/blackned/mce/src/utils/log.h:276:148: note: in definition of macro ‘OAILOG_WARNING’
+ #    define OAILOG_WARNING(pRoTo, ...)                                  do { log_message(NULL, OAILOG_LEVEL_WARNING,  pRoTo, __FILE__, __LINE__, ##__VA_ARGS__); } while(0) /*!< \brief warning conditions */
+                                                                                                                                                    ^~~~~~~~~~~
+/home/dbeken/Development/blackned/mce/src/mce_app/mce_app_main.c:161:65: note: format string is defined here
+        OAILOG_WARNING (LOG_MCE_APP, "TIMER_HAS_EXPIRED with ID %u and FOR MBMS Service with TMGI " TMGI_FMT ". \n",
+                                                                ~^
+                                                                %lu
+/home/dbeken/Development/blackned/mce/src/mce_app/mce_app_main.c:61:45: warning: unused variable ‘mbms_proc’ [-Wunused-variable]
+   const mce_app_mbms_proc_t               * mbms_proc  = NULL;
+                                             ^~~~~~~~~
+/home/dbeken/Development/blackned/mce/src/mce_app/mce_app_main.c:60:40: warning: unused variable ‘mbms_service’ [-Wunused-variable]
+   const struct mbms_service_s        * mbms_service  = NULL;
+                                        ^~~~~~~~~~~~
+/home/dbeken/Development/blackned/mce/src/mce_app/mce_app_main.c: At top level:
+/home/dbeken/Development/blackned/mce/src/mce_app/mce_app_main.c:189:1: warning: function declaration isn’t a prototype [-Wstrict-prototypes]
+ mce_initialize_mcch_repetition_timer() {
+ ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/dbeken/Development/blackned/mce/src/mce_app/mce_app_main.c: In function ‘mce_initialize_mcch_repetition_timer’:
+/home/dbeken/Development/blackned/mce/src/mce_app/mce_app_main.c:193:22: warning: implicit declaration of function ‘floor’ [-Wimplicit-function-declaration]
+  int mcch_timer_s  = floor(mcch_timer_us / 1000000);
+                      ^~~~~
+/home/dbeken/Development/blackned/mce/src/mce_app/mce_app_main.c:193:22: warning: incompatible implicit declaration of built-in function ‘floor’
+/home/dbeken/Development/blackned/mce/src/mce_app/mce_app_main.c:193:22: note: include ‘<math.h>’ or provide a declaration of ‘floor’
+/home/dbeken/Development/blackned/mce/src/mce_app/mce_app_main.c: In function ‘mce_app_init’:
+/home/dbeken/Development/blackned/mce/src/mce_app/mce_app_main.c:258:4: warning: return makes integer from pointer without a cast [-Wint-conversion]
+    OAILOG_FUNC_RETURN (LOG_MCE_APP, NULL);
+    ^~~~~~~~~~~~~~~~~~
+/home/dbeken/Development/blackned/mce/src/mce_app/mce_app_main.c:290:4: warning: return makes integer from pointer without a cast [-Wint-conversion]
+    OAILOG_FUNC_RETURN (LOG_MCE_APP, NULL);
+    ^~~~~~~~~~~~~~~~~~
+[ 90%] Built target 3GPP_TYPES
+[ 91%] Built target SCTP_SERVER
+[ 91%] Linking C static library libMCE_APP.a
+[ 94%] Built target M2AP_EPC
+[ 96%] Built target MCE_APP
+Scanning dependencies of target M3AP_EPC
+[ 96%] Building C object CMakeFiles/M3AP_EPC.dir/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme.c.o
+[ 97%] Building C object CMakeFiles/M3AP_EPC.dir/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_decoder.c.o
+In file included from /home/dbeken/Development/blackned/mce/src/common/sm_messages_types.h:34:0,
+                 from /home/dbeken/Development/blackned/mce/src/common/messages_types.h:30,
+                 from /home/dbeken/Development/blackned/mce/src/common/itti/intertask_interface_types.h:56,
+                 from /home/dbeken/Development/blackned/mce/src/common/itti/intertask_interface.h:39,
+                 from /home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme.c:49:
+/home/dbeken/Development/blackned/mce/src/common/common_types_mbms.h:225:1: warning: multi-line comment [-Wcomment]
+ //X(ENB_TYPE_TDD) \
+ ^
+In file included from /home/dbeken/Development/blackned/mce/src/m3ap/m3ap_common.h:150:0,
+                 from /home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme.h:37,
+                 from /home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme.c:52:
+/home/dbeken/Development/blackned/mce/src/common/common_types_mbms.h:225:1: warning: multi-line comment [-Wcomment]
+ //X(ENB_TYPE_TDD) \
+ ^
+In file included from /home/dbeken/Development/blackned/mce/src/common/sm_messages_types.h:34:0,
+                 from /home/dbeken/Development/blackned/mce/src/common/messages_types.h:30,
+                 from /home/dbeken/Development/blackned/mce/src/common/itti/intertask_interface_types.h:56,
+                 from /home/dbeken/Development/blackned/mce/src/common/itti/intertask_interface.h:39,
+                 from /home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_decoder.c:39:
+/home/dbeken/Development/blackned/mce/src/common/common_types_mbms.h:225:1: warning: multi-line comment [-Wcomment]
+ //X(ENB_TYPE_TDD) \
+ ^
+In file included from /home/dbeken/Development/blackned/mce/src/m3ap/m3ap_common.h:150:0,
+                 from /home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_decoder.c:41:
+/home/dbeken/Development/blackned/mce/src/common/common_types_mbms.h:225:1: warning: multi-line comment [-Wcomment]
+ //X(ENB_TYPE_TDD) \
+ ^
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme.c: In function ‘m3ap_clear_mce_mbms_stats_cb’:
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme.c:158:6: warning: implicit declaration of function ‘update_mme_app_stats_connected_m3ap_mce_sub’ [-Wimplicit-function-declaration]
+      update_mme_app_stats_connected_m3ap_mce_sub();
+      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme.c:135:25: warning: unused variable ‘mce_mbms_m3ap_id_p’ [-Wunused-variable]
+   mce_mbms_m3ap_id_t   *mce_mbms_m3ap_id_p = (mce_mbms_m3ap_id_t*)elementP;
+                         ^~~~~~~~~~~~~~~~~~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme.c: In function ‘m3ap_remove_mbms’:
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme.c:225:5: warning: passing argument 2 of ‘hashtable_uint64_ts_apply_callback_on_elements’ from incompatible pointer type [-Wincompatible-pointer-types]
+     m3ap_clear_mce_mbms_stats_cb, (void*)NULL, (void**)&no_return);
+     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme.c:44:0:
+/home/dbeken/Development/blackned/mce/src/utils/hashtable/hashtable.h:174:17: note: expected ‘_Bool (*)(const hash_key_t,  const uint64_t,  void *, void **) {aka _Bool (*)(const long unsigned int,  const long unsigned int,  void *, void **)}’ but argument is of type ‘_Bool (*)(const hash_key_t,  void * const,  void *, void **) {aka _Bool (*)(const long unsigned int,  void * const,  void *, void **)}’
+ hashtable_rc_t  hashtable_uint64_ts_apply_callback_on_elements (hash_table_uint64_ts_t * const hashtbl,
+                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme.c:203:31: warning: variable ‘mme_mbms_m3ap_id’ set but not used [-Wunused-but-set-variable]
+   mme_mbms_m3ap_id_t          mme_mbms_m3ap_id  = INVALID_MME_MBMS_M3AP_ID;
+                               ^~~~~~~~~~~~~~~~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme.c:201:36: warning: unused variable ‘m3ap_mce_ref’ [-Wunused-variable]
+   m3ap_mce_description_t          *m3ap_mce_ref    = NULL;
+                                    ^~~~~~~~~~~~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme.c: In function ‘m3ap_mce_thread’:
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme.c:357:8: warning: passing argument 2 of ‘m3ap_handle_mbms_session_stop_request’ makes integer from pointer without a cast [-Wint-conversion]
+        &M3AP_MBMS_SESSION_STOP_REQUEST (received_message_p).mbms_service_area_id,
+        ^
+In file included from /home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme.c:55:0:
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_procedures.h:43:1: note: expected ‘mbms_service_area_id_t {aka const short unsigned int}’ but argument is of type ‘mbms_service_area_id_t * {aka short unsigned int *}’
+ m3ap_handle_mbms_session_stop_request (
+ ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme.c:415:46: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+        mme_mbms_m3ap_id_t mme_mbms_m3ap_id = (mme_mbms_m3ap_id_t) received_message_p->ittiMsg.timer_has_expired.arg;
+                                              ^
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme.c:327:45: warning: unused variable ‘message_id’ [-Wunused-variable]
+     MessagesIds                             message_id = MESSAGES_ID_MAX;
+                                             ^~~~~~~~~~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme.c: In function ‘m3ap_is_mbms_area_list’:
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme.c:622:15: warning: assignment from incompatible pointer type [-Wincompatible-pointer-types]
+   ea.elements = m3ap_mces;
+               ^
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme.c:624:71: warning: passing argument 4 of ‘hashtable_ts_apply_list_callback_on_elements’ from incompatible pointer type [-Wincompatible-pointer-types]
+     m3ap_mce_compare_by_local_mbms_area_cb, (void *)&local_mbms_area, &ea_p);
+                                                                       ^
+In file included from /home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme.c:44:0:
+/home/dbeken/Development/blackned/mce/src/utils/hashtable/hashtable.h:156:1: note: expected ‘hashtable_element_array_t * {aka struct hashtable_element_array_s *}’ but argument is of type ‘hashtable_element_array_t ** {aka struct hashtable_element_array_s **}’
+ hashtable_ts_apply_list_callback_on_elements (hash_table_ts_t * const hashtblP,
+ ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme.c:618:30: warning: unused variable ‘m3ap_mce_ref’ [-Wunused-variable]
+   m3ap_mce_description_t    *m3ap_mce_ref     = NULL;
+                              ^~~~~~~~~~~~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme.c: In function ‘m3ap_is_mbms_sai_in_list’:
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme.c:641:15: warning: assignment from incompatible pointer type [-Wincompatible-pointer-types]
+   ea.elements = m3ap_mces;
+               ^
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme.c:643:144: warning: passing argument 4 of ‘hashtable_ts_apply_list_callback_on_elements’ from incompatible pointer type [-Wincompatible-pointer-types]
+   hashtable_ts_apply_list_callback_on_elements((hash_table_ts_t * const)&g_m3ap_mce_coll, m3ap_mce_compare_by_mbms_sai_cb, (void *)mbms_sai_p, &ea_p);
+                                                                                                                                                ^
+In file included from /home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme.c:44:0:
+/home/dbeken/Development/blackned/mce/src/utils/hashtable/hashtable.h:156:1: note: expected ‘hashtable_element_array_t * {aka struct hashtable_element_array_s *}’ but argument is of type ‘hashtable_element_array_t ** {aka struct hashtable_element_array_s **}’
+ hashtable_ts_apply_list_callback_on_elements (hash_table_ts_t * const hashtblP,
+ ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme.c:635:43: warning: unused variable ‘m3ap_mce_ref’ [-Wunused-variable]
+   m3ap_mce_description_t                 *m3ap_mce_ref  = NULL;
+                                           ^~~~~~~~~~~~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme.c: In function ‘m3ap_is_mbms_sai_not_in_list’:
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme.c:660:15: warning: assignment from incompatible pointer type [-Wincompatible-pointer-types]
+   ea.elements = m3ap_mces;
+               ^
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme.c:662:149: warning: passing argument 4 of ‘hashtable_ts_apply_list_callback_on_elements’ from incompatible pointer type [-Wincompatible-pointer-types]
+   hashtable_ts_apply_list_callback_on_elements((hash_table_ts_t * const)&g_m3ap_mce_coll, m3ap_mce_compare_by_mbms_sai_NACK_cb, (void *)mbms_sai_p, &ea_p);
+                                                                                                                                                     ^
+In file included from /home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme.c:44:0:
+/home/dbeken/Development/blackned/mce/src/utils/hashtable/hashtable.h:156:1: note: expected ‘hashtable_element_array_t * {aka struct hashtable_element_array_s *}’ but argument is of type ‘hashtable_element_array_t ** {aka struct hashtable_element_array_s **}’
+ hashtable_ts_apply_list_callback_on_elements (hash_table_ts_t * const hashtblP,
+ ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme.c:654:43: warning: unused variable ‘m3ap_mce_ref’ [-Wunused-variable]
+   m3ap_mce_description_t                 *m3ap_mce_ref  = NULL;
+                                           ^~~~~~~~~~~~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme.c: In function ‘m3ap_new_mbms’:
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme.c:783:17: warning: passing argument 1 of ‘free_wrapper’ from incompatible pointer type [-Wincompatible-pointer-types]
+    free_wrapper(&mbms_ref);
+                 ^
+In file included from /home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme.c:58:0:
+/home/dbeken/Development/blackned/mce/src/utils/dynamic_memory_check.h:34:6: note: expected ‘void **’ but argument is of type ‘mbms_description_t ** {aka struct mbms_description_s **}’
+ void free_wrapper(void **ptr)                      __attribute__ ((hot));
+      ^~~~~~~~~~~~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme.c:753:45: warning: unused variable ‘m3ap_mce_ref’ [-Wunused-variable]
+   m3ap_mce_description_t                   *m3ap_mce_ref = NULL;
+                                             ^~~~~~~~~~~~
+[ 97%] Building C object CMakeFiles/M3AP_EPC.dir/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_handlers.c.o
+[ 97%] Building C object CMakeFiles/M3AP_EPC.dir/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_procedures.c.o
+In file included from /home/dbeken/Development/blackned/mce/src/common/sm_messages_types.h:34:0,
+                 from /home/dbeken/Development/blackned/mce/src/common/messages_types.h:30,
+                 from /home/dbeken/Development/blackned/mce/src/common/itti/intertask_interface_types.h:56,
+                 from /home/dbeken/Development/blackned/mce/src/common/itti/intertask_interface.h:39,
+                 from /home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme.h:33,
+                 from /home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_handlers.h:31,
+                 from /home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_handlers.c:30:
+/home/dbeken/Development/blackned/mce/src/common/common_types_mbms.h:225:1: warning: multi-line comment [-Wcomment]
+ //X(ENB_TYPE_TDD) \
+ ^
+In file included from /home/dbeken/Development/blackned/mce/src/common/sm_messages_types.h:34:0,
+                 from /home/dbeken/Development/blackned/mce/src/common/messages_types.h:30,
+                 from /home/dbeken/Development/blackned/mce/src/common/itti/intertask_interface_types.h:56,
+                 from /home/dbeken/Development/blackned/mce/src/common/itti/intertask_interface.h:39,
+                 from /home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_procedures.c:42:
+/home/dbeken/Development/blackned/mce/src/common/common_types_mbms.h:225:1: warning: multi-line comment [-Wcomment]
+ //X(ENB_TYPE_TDD) \
+ ^
+In file included from /home/dbeken/Development/blackned/mce/src/m3ap/m3ap_common.h:150:0,
+                 from /home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme.h:37,
+                 from /home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_handlers.h:31,
+                 from /home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_handlers.c:30:
+/home/dbeken/Development/blackned/mce/src/common/common_types_mbms.h:225:1: warning: multi-line comment [-Wcomment]
+ //X(ENB_TYPE_TDD) \
+ ^
+In file included from /home/dbeken/Development/blackned/mce/src/mce_app/mce_config.h:37:0,
+                 from /home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_procedures.c:46:
+/home/dbeken/Development/blackned/mce/src/common/common_types_mbms.h:225:1: warning: multi-line comment [-Wcomment]
+ //X(ENB_TYPE_TDD) \
+ ^
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_procedures.c: In function ‘m3ap_handle_mbms_session_start_request’:
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_procedures.c:110:77: warning: passing argument 2 of ‘m3ap_is_mbms_sai_in_list’ from incompatible pointer type [-Wincompatible-pointer-types]
+   m3ap_is_mbms_sai_in_list(mbms_session_start_req_pP->mbms_service_area_id, &num_m3ap_mces, (m3ap_mce_description_t **)m3ap_mce_p_elements);
+                                                                             ^
+In file included from /home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_procedures.c:51:0:
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme.h:111:6: note: expected ‘int *’ but argument is of type ‘uint8_t * {aka unsigned char *}’
+ void m3ap_is_mbms_sai_in_list (
+      ^~~~~~~~~~~~~~~~~~~~~~~~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_procedures.c:110:93: warning: passing argument 3 of ‘m3ap_is_mbms_sai_in_list’ from incompatible pointer type [-Wincompatible-pointer-types]
+   m3ap_is_mbms_sai_in_list(mbms_session_start_req_pP->mbms_service_area_id, &num_m3ap_mces, (m3ap_mce_description_t **)m3ap_mce_p_elements);
+                                                                                             ^
+In file included from /home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_procedures.c:51:0:
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme.h:111:6: note: expected ‘const m3ap_mce_description_t ** {aka const struct m3ap_mce_description_s **}’ but argument is of type ‘m3ap_mce_description_t ** {aka struct m3ap_mce_description_s **}’
+ void m3ap_is_mbms_sai_in_list (
+      ^~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_handlers.c:38:0:
+/home/dbeken/Development/blackned/mce/src/m3ap/3gpp_requirements_36.444.h:40:1: warning: multi-line comment [-Wcomment]
+ //#define R10_8_3_3_2__2 "MME36.444R10_8.3.3.2_2: Successful Operation\
+ ^
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_procedures.c:146:51: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+      TASK_M3AP, INSTANCE_DEFAULT, TIMER_ONE_SHOT, (void*)mme_mbms_m3ap_id, &(mbms_ref->mxap_action_timer.id)) < 0) {
+                                                   ^
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_procedures.c:162:77: warning: passing argument 3 of ‘m3ap_generate_mbms_session_start_request’ from incompatible pointer type [-Wincompatible-pointer-types]
+   m3ap_generate_mbms_session_start_request(mme_mbms_m3ap_id, num_m3ap_mces, &m3ap_mce_p_elements);
+                                                                             ^
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_procedures.c:67:12: note: expected ‘m3ap_mce_description_t ** {aka struct m3ap_mce_description_s **}’ but argument is of type ‘m3ap_mce_description_t * (*)[(sizetype)(mce_config.max_m3_mces)]’
+ static int m3ap_generate_mbms_session_start_request(mme_mbms_m3ap_id_t mbms_m3ap_id, const uint8_t num_m3ap_mces, m3ap_mce_description_t ** m3ap_mce_descriptions);
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_procedures.c:82:41: warning: unused variable ‘length’ [-Wunused-variable]
+   uint32_t                              length = 0;
+                                         ^~~~~~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_procedures.c:81:41: warning: unused variable ‘buffer_p’ [-Wunused-variable]
+   uint8_t                              *buffer_p = NULL;
+                                         ^~~~~~~~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_procedures.c: In function ‘m3ap_handle_mbms_session_update_request’:
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_procedures.c:209:5: warning: passing argument 3 of ‘m3ap_is_mbms_sai_in_list’ from incompatible pointer type [-Wincompatible-pointer-types]
+     (m3ap_mce_description_t **)m3ap_mce_p_elements);
+     ^
+In file included from /home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_procedures.c:51:0:
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme.h:111:6: note: expected ‘const m3ap_mce_description_t ** {aka const struct m3ap_mce_description_s **}’ but argument is of type ‘m3ap_mce_description_t ** {aka struct m3ap_mce_description_s **}’
+ void m3ap_is_mbms_sai_in_list (
+      ^~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_procedures.c:39:0:
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_procedures.c:227:28: warning: format ‘%x’ expects a matching ‘unsigned int’ argument [-Wformat=]
+    OAILOG_ERROR (LOG_M3AP, "(%d) M3AP MCEs not supporting new MBMS SAI " MBMS_SERVICE_AREA_ID_FMT" for the MBMS Service with TMGI " TMGI_FMT". "
+                            ^
+/home/dbeken/Development/blackned/mce/src/utils/log.h:275:148: note: in definition of macro ‘OAILOG_ERROR’
+ #    define OAILOG_ERROR(pRoTo, ...)                                    do { log_message(NULL, OAILOG_LEVEL_ERROR,    pRoTo, __FILE__, __LINE__, ##__VA_ARGS__); } while(0) /*!< \brief error conditions */
+                                                                                                                                                    ^~~~~~~~~~~
+In file included from /home/dbeken/Development/blackned/mce/src/common/sm_messages_types.h:34:0,
+                 from /home/dbeken/Development/blackned/mce/src/common/messages_types.h:30,
+                 from /home/dbeken/Development/blackned/mce/src/common/itti/intertask_interface_types.h:56,
+                 from /home/dbeken/Development/blackned/mce/src/common/itti/intertask_interface.h:39,
+                 from /home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_procedures.c:42:
+/home/dbeken/Development/blackned/mce/src/common/common_types_mbms.h:76:31: note: format string is defined here
+ #define TMGI_FMT PLMN_FMT"|%04x"
+                            ~~~^
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_procedures.c:252:57: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+            TASK_M3AP, INSTANCE_DEFAULT, TIMER_ONE_SHOT, (void*)mbms_ref->mme_mbms_m3ap_id, &(mbms_ref->mxap_action_timer.id)) < 0) {
+                                                         ^
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_procedures.c:177:27: warning: unused variable ‘pdu’ [-Wunused-variable]
+   M3AP_M3AP_PDU_t         pdu        = {0};
+                           ^~~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_procedures.c:175:27: warning: unused variable ‘length’ [-Wunused-variable]
+   uint32_t                length       = 0;
+                           ^~~~~~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_procedures.c:174:27: warning: unused variable ‘buffer_p’ [-Wunused-variable]
+   uint8_t                *buffer_p       = NULL;
+                           ^~~~~~~~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_procedures.c: In function ‘m3ap_handle_mbms_session_stop_request’:
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_procedures.c:304:67: warning: passing argument 3 of ‘m3ap_is_mbms_sai_in_list’ from incompatible pointer type [-Wincompatible-pointer-types]
+    m3ap_is_mbms_sai_in_list(mbms_service_area_id, &num_m3ap_mces, (m3ap_mce_description_t **)m3ap_mce_p_elements);
+                                                                   ^
+In file included from /home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_procedures.c:51:0:
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme.h:111:6: note: expected ‘const m3ap_mce_description_t ** {aka const struct m3ap_mce_description_s **}’ but argument is of type ‘m3ap_mce_description_t ** {aka struct m3ap_mce_description_s **}’
+ void m3ap_is_mbms_sai_in_list (
+      ^~~~~~~~~~~~~~~~~~~~~~~~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_procedures.c:282:43: warning: unused variable ‘pdu’ [-Wunused-variable]
+   M3AP_M3AP_PDU_t                         pdu = {0};
+                                           ^~~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_procedures.c:281:43: warning: unused variable ‘target_mce_ref’ [-Wunused-variable]
+   m3ap_mce_description_t                 *target_mce_ref = NULL;
+                                           ^~~~~~~~~~~~~~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_procedures.c:279:43: warning: unused variable ‘length’ [-Wunused-variable]
+   uint32_t                                length = 0;
+                                           ^~~~~~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_procedures.c:278:43: warning: unused variable ‘buffer_p’ [-Wunused-variable]
+   uint8_t                                *buffer_p = NULL;
+                                           ^~~~~~~~
+In file included from /home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_procedures.c:39:0:
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_procedures.c: In function ‘m3ap_generate_mbms_session_stop_request’:
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_procedures.c:354:28: warning: too many arguments for format [-Wformat-extra-args]
+    OAILOG_ERROR (LOG_M3AP, "No MCE MBMS M3AP ID could be retrieved. Cannot generate MBMS Session Stop Request. \n", mce_mbms_m3ap_id);
+                            ^
+/home/dbeken/Development/blackned/mce/src/utils/log.h:275:148: note: in definition of macro ‘OAILOG_ERROR’
+ #    define OAILOG_ERROR(pRoTo, ...)                                    do { log_message(NULL, OAILOG_LEVEL_ERROR,    pRoTo, __FILE__, __LINE__, ##__VA_ARGS__); } while(0) /*!< \brief error conditions */
+                                                                                                                                                    ^~~~~~~~~~~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_procedures.c:398:3: warning: implicit declaration of function ‘m3ap_mme_itti_send_sctp_request’; did you mean ‘m2ap_mme_itti_send_sctp_request’? [-Wimplicit-function-declaration]
+   m3ap_mme_itti_send_sctp_request(&b, m3ap_mce_description->sctp_assoc_id, MBMS_SERVICE_SCTP_STREAM_ID, mme_mbms_m3ap_id);
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   m2ap_mme_itti_send_sctp_request
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_procedures.c:333:35: warning: unused variable ‘id’ [-Wunused-variable]
+   void                           *id = NULL;
+                                   ^~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_procedures.c:332:35: warning: unused variable ‘message_id’ [-Wunused-variable]
+   MessagesIds                     message_id = MESSAGES_ID_MAX;
+                                   ^~~~~~~~~~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_procedures.c: In function ‘m3ap_mme_handle_mbms_action_timer_expiry’:
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_procedures.c:429:64: warning: passing argument 2 of ‘m3ap_is_mbms_sai_in_list’ from incompatible pointer type [-Wincompatible-pointer-types]
+     m3ap_is_mbms_sai_in_list(mbms_ref_p->mbms_service_area_id, &num_m3ap_mces, (m3ap_mce_description_t **)m3ap_mce_p_elements);
+                                                                ^
+In file included from /home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_procedures.c:51:0:
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme.h:111:6: note: expected ‘int *’ but argument is of type ‘uint8_t * {aka unsigned char *}’
+ void m3ap_is_mbms_sai_in_list (
+      ^~~~~~~~~~~~~~~~~~~~~~~~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_procedures.c:429:80: warning: passing argument 3 of ‘m3ap_is_mbms_sai_in_list’ from incompatible pointer type [-Wincompatible-pointer-types]
+     m3ap_is_mbms_sai_in_list(mbms_ref_p->mbms_service_area_id, &num_m3ap_mces, (m3ap_mce_description_t **)m3ap_mce_p_elements);
+                                                                                ^
+In file included from /home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_procedures.c:51:0:
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme.h:111:6: note: expected ‘const m3ap_mce_description_t ** {aka const struct m3ap_mce_description_s **}’ but argument is of type ‘m3ap_mce_description_t ** {aka struct m3ap_mce_description_s **}’
+ void m3ap_is_mbms_sai_in_list (
+      ^~~~~~~~~~~~~~~~~~~~~~~~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_procedures.c:406:43: warning: unused variable ‘message_p’ [-Wunused-variable]
+   MessageDef                             *message_p = NULL;
+                                           ^~~~~~~~~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_procedures.c: In function ‘m3ap_update_mbms_service_context’:
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_procedures.c:478:88: warning: passing argument 3 of ‘m3ap_is_mbms_sai_in_list’ from incompatible pointer type [-Wincompatible-pointer-types]
+   m3ap_is_mbms_sai_in_list(mbms_ref->mbms_service_area_id, &num_m3ap_mce_new_mbms_sai, (m3ap_mce_description_t **)m3ap_me_p_elements);
+                                                                                        ^
+In file included from /home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_procedures.c:51:0:
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme.h:111:6: note: expected ‘const m3ap_mce_description_t ** {aka const struct m3ap_mce_description_s **}’ but argument is of type ‘m3ap_mce_description_t ** {aka struct m3ap_mce_description_s **}’
+ void m3ap_is_mbms_sai_in_list (
+      ^~~~~~~~~~~~~~~~~~~~~~~~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_handlers.c: In function ‘m3ap_mme_generate_m3_setup_failure’:
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_handlers.c:213:9: warning: implicit declaration of function ‘m3ap_mme_itti_send_sctp_request’; did you mean ‘m2ap_mme_itti_send_sctp_request’? [-Wimplicit-function-declaration]
+   rc =  m3ap_mme_itti_send_sctp_request (&b, assoc_id, stream, INVALID_MCE_MBMS_M3AP_ID);
+         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         m2ap_mme_itti_send_sctp_request
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_handlers.c: In function ‘m3ap_mme_handle_m3_setup_request’:
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_handlers.c:420:3: warning: implicit declaration of function ‘m3ap_mme_itti_m3ap_mce_setup_request’; did you mean ‘m2ap_mme_itti_m3ap_mce_setup_request’? [-Wimplicit-function-declaration]
+   m3ap_mme_itti_m3ap_mce_setup_request(assoc_id, m3ap_mce_id, &m3ap_mce_association->mbms_sa_list);
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   m2ap_mme_itti_m3ap_mce_setup_request
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_handlers.c:240:43: warning: unused variable ‘mbms_sa_ret’ [-Wunused-variable]
+   int                                     mbms_sa_ret = 0;
+                                           ^~~~~~~~~~~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_handlers.c:239:43: warning: unused variable ‘m3ap_mce_name’ [-Wunused-variable]
+   char                                   *m3ap_mce_name = NULL;
+                                           ^~~~~~~~~~~~~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_handlers.c:235:43: warning: unused variable ‘ecgi’ [-Wunused-variable]
+   ecgi_t                                  ecgi = {.plmn = {0}, .cell_identity = {0}};
+                                           ^~~~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_handlers.c:234:43: warning: unused variable ‘ie_mce_mbms_configuration_per_cell’ [-Wunused-variable]
+   M3AP_M3SetupRequestIEs_t               *ie_mce_mbms_configuration_per_cell = NULL;
+                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_handlers.c:233:43: warning: unused variable ‘ie_mce_name’ [-Wunused-variable]
+   M3AP_M3SetupRequestIEs_t               *ie_mce_name = NULL;
+                                           ^~~~~~~~~~~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_handlers.c:232:43: warning: unused variable ‘ie’ [-Wunused-variable]
+   M3AP_M3SetupRequestIEs_t               *ie = NULL;
+                                           ^~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_handlers.c:231:43: warning: variable ‘container’ set but not used [-Wunused-but-set-variable]
+   M3AP_M3SetupRequest_t                  *container = NULL;
+                                           ^~~~~~~~~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_handlers.c: In function ‘m3ap_generate_m3_setup_response’:
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_handlers.c:433:48: warning: unused variable ‘ie’ [-Wunused-variable]
+   M3AP_M3SetupResponseIEs_t                   *ie = NULL;
+                                                ^~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_handlers.c:432:49: warning: unused variable ‘out’ [-Wunused-variable]
+   M3AP_M3SetupResponse_t                       *out;
+                                                 ^~~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_handlers.c:431:48: warning: unused variable ‘pdu’ [-Wunused-variable]
+   M3AP_M3AP_PDU_t                              pdu;
+                                                ^~~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_handlers.c:430:50: warning: unused variable ‘j’ [-Wunused-variable]
+   int                                          i,j;
+                                                  ^
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_handlers.c:430:48: warning: unused variable ‘i’ [-Wunused-variable]
+   int                                          i,j;
+                                                ^
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_handlers.c: In function ‘m3ap_mme_handle_mbms_session_start_response’:
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_handlers.c:574:44: warning: unused variable ‘message_p’ [-Wunused-variable]
+   MessageDef                              *message_p = NULL;
+                                            ^~~~~~~~~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_handlers.c: In function ‘m3ap_mme_handle_mbms_session_start_failure’:
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_handlers.c:626:43: warning: unused variable ‘message_p’ [-Wunused-variable]
+   MessageDef                             *message_p = NULL;
+                                           ^~~~~~~~~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_handlers.c: In function ‘m3ap_mme_handle_mbms_session_stop_response’:
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_handlers.c:667:43: warning: variable ‘mce_mbms_m3ap_id’ set but not used [-Wunused-but-set-variable]
+   mce_mbms_m3ap_id_t                      mce_mbms_m3ap_id = 0;
+                                           ^~~~~~~~~~~~~~~~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_handlers.c:665:43: warning: unused variable ‘message_p’ [-Wunused-variable]
+   MessageDef                             *message_p = NULL;
+                                           ^~~~~~~~~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_handlers.c:664:43: warning: unused variable ‘mbms_ref_p’ [-Wunused-variable]
+   mbms_description_t                     *mbms_ref_p = NULL;
+                                           ^~~~~~~~~~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_handlers.c: In function ‘m3ap_mme_handle_mbms_session_update_response’:
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_handlers.c:703:43: warning: unused variable ‘rc’ [-Wunused-variable]
+   int                                     rc = RETURNok;
+                                           ^~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_handlers.c:702:43: warning: unused variable ‘message_p’ [-Wunused-variable]
+   MessageDef                             *message_p = NULL;
+                                           ^~~~~~~~~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_handlers.c: In function ‘m3ap_mme_handle_mbms_session_update_failure’:
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_handlers.c:749:41: warning: variable ‘mce_mbms_m3ap_id’ set but not used [-Wunused-but-set-variable]
+   mce_mbms_m3ap_id_t                    mce_mbms_m3ap_id = 0;
+                                         ^~~~~~~~~~~~~~~~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_handlers.c:745:40: warning: unused variable ‘message_p’ [-Wunused-variable]
+   MessageDef                          *message_p = NULL;
+                                        ^~~~~~~~~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_handlers.c: In function ‘m3ap_mme_handle_reset_request’:
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_handlers.c:801:40: warning: unused variable ‘m3ap_mce_initiated_reset_ack’ [-Wunused-variable]
+   itti_m3ap_mce_initiated_reset_ack_t  m3ap_mce_initiated_reset_ack = {0};
+                                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_handlers.c:799:38: warning: unused variable ‘mbms_ref_p’ [-Wunused-variable]
+   mbms_description_t                *mbms_ref_p = NULL;
+                                      ^~~~~~~~~~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_handlers.c: In function ‘m3ap_mme_handle_error_indication’:
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_handlers.c:927:45: warning: unused variable ‘cause_value’ [-Wunused-variable]
+   long                                      cause_value;
+                                             ^~~~~~~~~~~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_handlers.c:926:45: warning: unused variable ‘message_p’ [-Wunused-variable]
+   MessageDef                               *message_p = NULL;
+                                             ^~~~~~~~~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_handlers.c: In function ‘m3ap_handle_sctp_disconnection’:
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_handlers.c:979:43: warning: unused variable ‘i’ [-Wunused-variable]
+   int                                     i = 0;
+                                           ^
+In file included from /home/dbeken/Development/blackned/mce/src/m3ap/3gpp_requirements_36.444.h:33:0,
+                 from /home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_handlers.c:38:
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_handlers.c: In function ‘m3ap_handle_mce_initiated_reset_ack’:
+/home/dbeken/Development/blackned/mce/src/utils/log.h:293:136: warning: ‘return’ with no value, in function returning non-void
+ #        define OAILOG_FUNC_OUT(pRoTo)                                  do { log_func(false, pRoTo, __FILE__, __LINE__, __FUNCTION__); return;} while(0) /*!< \brief informational */
+                                                                                                                                        ^
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_handlers.c:1124:4: note: in expansion of macro ‘OAILOG_FUNC_OUT’
+    OAILOG_FUNC_OUT (LOG_M3AP);
+    ^~~~~~~~~~~~~~~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_handlers.c:1062:1: note: declared here
+ m3ap_handle_mce_initiated_reset_ack (
+ ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_handlers.c:1070:40: warning: unused variable ‘reset_ack_ie’ [-Wunused-variable]
+   M3AP_ResetAcknowledgeIEs_t          *reset_ack_ie = NULL;
+                                        ^~~~~~~~~~~~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_procedures.c: In function ‘m3ap_generate_mbms_session_start_request’:
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_procedures.c:532:43: warning: unused variable ‘id’ [-Wunused-variable]
+   void                                   *id = NULL;
+                                           ^~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_procedures.c:531:43: warning: unused variable ‘message_id’ [-Wunused-variable]
+   MessagesIds                             message_id = MESSAGES_ID_MAX;
+                                           ^~~~~~~~~~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_procedures.c: In function ‘m3ap_generate_mbms_session_update_request’:
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_procedures.c:663:43: warning: unused variable ‘id’ [-Wunused-variable]
+   void                                   *id = NULL;
+                                           ^~
+/home/dbeken/Development/blackned/mce/src/m3ap/m3ap_mme_procedures.c:662:43: warning: unused variable ‘message_id’ [-Wunused-variable]
+   MessagesIds                             message_id = MESSAGES_ID_MAX;
+                                           ^~~~~~~~~~
+[ 97%] Linking C static library libM3AP_EPC.a
+[ 98%] Built target M3AP_EPC
+[ 99%] Linking C executable mce
+[100%] Built target mce

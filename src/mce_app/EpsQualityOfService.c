@@ -281,24 +281,24 @@ void qos_params_to_eps_qos(const qci_e qci, const bitrate_t mbr_dl, const bitrat
 int validateEpsQosParameter(qci_e qci, int pvi, int pci, int pl, bitrate_t gbr_ul, bitrate_t gbr_dl, bitrate_t mbr_ul, bitrate_t mbr_dl){
   /** Check ARP. */
   if(!(0 <= pvi && pvi  <= 1))
-    OAILOG_FUNC_RETURN(LOG_NAS_ESM, RETURNerror);
+    OAILOG_FUNC_RETURN(LOG_MCE_APP, RETURNerror);
 
   if(!(0 <= pci && pci <= 1))
-    OAILOG_FUNC_RETURN(LOG_NAS_ESM, RETURNerror);
+    OAILOG_FUNC_RETURN(LOG_MCE_APP, RETURNerror);
 
   if(!(0 <= pl && pl <= 15))
-    OAILOG_FUNC_RETURN(LOG_NAS_ESM, RETURNerror);
+    OAILOG_FUNC_RETURN(LOG_MCE_APP, RETURNerror);
 
 
   /** Check MBR/GBR depending on QCI. */
   if(is_qci_gbr(qci)){
     /** Received a GBR QCI. Check that bitrate values are set. */
     if(gbr_dl && gbr_ul && mbr_dl &&  mbr_ul )
-      OAILOG_FUNC_RETURN(LOG_NAS_ESM, RETURNok);
+      OAILOG_FUNC_RETURN(LOG_MCE_APP, RETURNok);
   }else {
     /** Received a NON-GBR QCI. Check that bitrate values are 0. */
     if(!(gbr_dl || gbr_ul || mbr_dl ||  mbr_ul ))
-      OAILOG_FUNC_RETURN(LOG_NAS_ESM, RETURNok);
+      OAILOG_FUNC_RETURN(LOG_MCE_APP, RETURNok);
   }
-  OAILOG_FUNC_RETURN(LOG_NAS_ESM, RETURNerror);
+  OAILOG_FUNC_RETURN(LOG_MCE_APP, RETURNerror);
 }

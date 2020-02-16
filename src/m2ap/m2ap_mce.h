@@ -36,12 +36,10 @@
 #include "hashtable.h"
 #include "m2ap_common.h"
 #include "mce_app_bearer_context.h"
+#include "mxap_main.h"
 
 // Forward declarations
 struct m2ap_enb_description_s;
-
-#define M2AP_TIMER_INACTIVE_ID   (-1)
-#define M2AP_MBMS_CONTEXT_REL_COMP_TIMER 1 // in seconds
 
 #define M2AP_ENB_SERVICE_SCTP_STREAM_ID         0
 #define MBMS_SERVICE_SCTP_STREAM_ID          	1
@@ -59,47 +57,6 @@ enum mce_m2_enb_state_s {
   M2AP_READY,         ///< MCE and eNB are M2 associated, MBMS contexts can be added
   M2AP_SHUTDOWN       /// The M2 state is being torn down due to sctp shutdown.
 };
-
-/** Main structure representing MBMS Bearer service association over m2ap per eNB.
- * Created upon a successful
- **/
-typedef struct mbms_description_s {
-  mce_mbms_m2ap_id_t 			mce_mbms_m2ap_id:24;    ///< Unique MBMS id over MCE (24 bits wide)
-  mce_mbms_m2ap_id_t 			enb_mbms_m2ap_id:16;    ///< Unique MBMS id over MCE (24 bits wide)
- /** List of SCTP associations pointing to the eNBs. */
-  hash_table_uint64_ts_t	g_m2ap_assoc_id2mce_enb_id_coll; // key is enb_mbms_m2ap_id, key is sctp association id;
-
-  /** MBMS Parameters. */
-  tmgi_t					    tmgi;
-  mbms_service_area_id_t		mbms_service_area_id;
-
-  /** SCTP stream on which M2 message will be sent/received.
-   *  During an MBMS M2 connection, a pair of streams is
-   *  allocated and is used during all the connection.
-   *  Stream 0 is reserved for non MBMS signalling.
-   *  @name sctp stream identifier
-   **/
-
-  /*@{*/
-//  sctp_stream_id_t sctp_stream_recv; ///< eNB -> MCE stream
-//  sctp_stream_id_t sctp_stream_send; ///< MCE -> eNB stream
-//  /*@}*/
-//
-
-  /** MBMS Bearer. */
-  struct mbms_bearer_context_s		mbms_bc;
-
-  // MBMS Action timer
-  struct m2ap_timer_t       m2ap_action_timer;
-} mbms_description_t;
-
-/*
- * Used to search by TMGI and MBMS SAI.
- */
-typedef struct m2ap_tmgi_s{
-  tmgi_t					tmgi;
-  mbms_service_area_id_t 	mbms_service_area_id_t;
-}m2ap_tmgi_t;
 
 /* Main structure representing eNB association over m2ap
  * Generated (or updated) every time a new M2SetupRequest is received.

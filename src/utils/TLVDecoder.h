@@ -61,12 +61,12 @@ void tlv_decode_perror(void);
 
 #define CHECK_PDU_POINTER_AND_LENGTH_DECODER(bUFFER, mINIMUMlENGTH, lENGTH)    \
   if (bUFFER == NULL) {                                                        \
-    OAILOG_WARNING(LOG_NAS_EMM, "Got NULL pointer for the payload\n");             \
+    OAILOG_WARNING(LOG_MCE_APP, "Got NULL pointer for the payload\n");             \
     errorCodeDecoder = TLV_BUFFER_NULL;                                        \
     return TLV_BUFFER_NULL;                                                    \
   }                                                                            \
   if (lENGTH < mINIMUMlENGTH) {                                                \
-    OAILOG_WARNING(LOG_NAS_EMM, "Expecting at least %d bytes, got %d\n"            \
+    OAILOG_WARNING(LOG_MCE_APP, "Expecting at least %d bytes, got %d\n"            \
        , mINIMUMlENGTH, lENGTH);                                               \
     errorCodeDecoder = TLV_BUFFER_TOO_SHORT;                                   \
     return TLV_BUFFER_TOO_SHORT;                                               \
@@ -88,7 +88,7 @@ void tlv_decode_perror(void);
 
 #define CHECK_IEI_DECODER(iEI, bUFFER)                                         \
         if (iEI != bUFFER) {                                                   \
-          OAILOG_WARNING(LOG_NAS_EMM, "IEI is different than the one expected."    \
+          OAILOG_WARNING(LOG_MCE_APP, "IEI is different than the one expected."    \
                 "(Got: 0x%x, expecting: 0x%x\n", bUFFER, iEI);                 \
           errorCodeDecoder = TLV_UNEXPECTED_IEI;                               \
           return TLV_UNEXPECTED_IEI;                                           \

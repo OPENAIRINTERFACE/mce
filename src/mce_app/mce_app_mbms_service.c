@@ -168,10 +168,10 @@ mce_app_handle_mbms_session_start_request(
 
   mce_config_read_lock (&mce_config);
   /** Check for a minimum time. */
-  if(mbms_session_start_request_pP->mbms_session_duration.seconds < mce_config.mbms.mbms_mcch_modification_period_rf * 10000) {
+  if(mbms_session_start_request_pP->mbms_session_duration.seconds < mce_config.mbms_mcch_modification_period_rf * 10000) {
     OAILOG_WARNING(LOG_MCE_APP, "MBM Session duration (%ds) is shorter than the minimum (%ds) for MBMS Service Request for TMGI " TMGI_FMT " (MCCH modify). Setting to minval. \n",
-    	mbms_session_start_request_pP->mbms_session_duration.seconds, mce_config.mbms.mbms_mcch_modification_period_rf * 10000, TMGI_ARG(&mbms_session_start_request_pP->tmgi));
-    mbms_session_start_request_pP->mbms_session_duration.seconds = mce_config.mbms.mbms_mcch_modification_period_rf * 10000;
+    	mbms_session_start_request_pP->mbms_session_duration.seconds, mce_config.mbms_mcch_modification_period_rf * 10000, TMGI_ARG(&mbms_session_start_request_pP->tmgi));
+    mbms_session_start_request_pP->mbms_session_duration.seconds = mce_config.mbms_mcch_modification_period_rf * 10000;
   }
   mce_config_unlock (&mce_config);
 
@@ -205,7 +205,7 @@ mce_app_handle_mbms_session_start_request(
     OAILOG_ERROR(LOG_MCE_APP, "An old MBMS Service context already existed for TMGI " TMGI_FMT " and MBMS Service Area " MBMS_SERVICE_AREA_ID_FMT ". Implicitly removing old one (& removing procedures). \n",
     	TMGI_ARG(&mbms_session_start_request_pP->tmgi), mbms_service_area_id);
     /** Removing old MBMS Service Context and informing the MCE APP. No response is expected from MCE. */
-    mce_app_itti_m3ap_mbms_session_stop_request(&mbms_service->privates.fields.tmgi, mbms_service->privates.fields.mbms_service_area_id, true);
+    mce_app_itti_m2ap_mbms_session_stop_request(&mbms_service->privates.fields.tmgi, mbms_service->privates.fields.mbms_service_area_id, true);
     /** Remove the Sm Tunnel for the old one. */
     mce_app_stop_mbms_service(&mbms_service->privates.fields.tmgi, mbms_service->privates.fields.mbms_service_area_id, mbms_service->privates.fields.mme_teid_sm,
     	(struct sockaddr*)&mbms_service->privates.fields.mbms_peer_ip);
@@ -299,7 +299,7 @@ mce_app_handle_mbms_session_start_request(
   OAILOG_INFO(LOG_MCE_APP, "Created a MBMS procedure for new MBMS Session with TMGI " TMGI_FMT " and MBMS Service Area " MBMS_SERVICE_AREA_ID_FMT ". Informing the MCE over M3. \n",
     TMGI_ARG(&mbms_session_start_request_pP->tmgi), mbms_service_area_id);
   /** Trigger M3AP MBMS Session Start Request. */
-  mce_app_itti_m3ap_mbms_session_start_request(&mbms_session_start_request_pP->tmgi, mbms_service_area_id, &mbms_session_start_request_pP->mbms_bearer_level_qos,
+  mce_app_itti_m2ap_mbms_session_start_request(&mbms_session_start_request_pP->tmgi, mbms_service_area_id, &mbms_session_start_request_pP->mbms_bearer_level_qos,
   		&mbms_service->privates.fields.mbms_bc.mbms_ip_mc_distribution, mbms_session_start_request_pP->abs_start_time.sec_since_epoch,
 			mbms_session_start_request_pP->abs_start_time.usec);
   /**
@@ -401,10 +401,10 @@ mce_app_handle_mbms_session_update_request(
 
   mce_config_read_lock (&mce_config);
   /** Check for a minimum time. */
-  if(mbms_session_update_request_pP->mbms_session_duration.seconds < mce_config.mbms.mbms_mcch_modification_period_rf * 10000) {
+  if(mbms_session_update_request_pP->mbms_session_duration.seconds < mce_config.mbms_mcch_modification_period_rf * 10000) {
     OAILOG_WARNING(LOG_MCE_APP, "MBM Session duration (%ds) is shorter than the minimum (%ds) for MBMS Service Request for TMGI " TMGI_FMT " (MCCH modify). Setting to minval. \n",
-    	mbms_session_update_request_pP->mbms_session_duration.seconds, mce_config.mbms.mbms_mcch_modification_period_rf * 10000, TMGI_ARG(&mbms_session_update_request_pP->tmgi));
-    mbms_session_update_request_pP->mbms_session_duration.seconds = mce_config.mbms.mbms_mcch_modification_period_rf * 10000;
+    	mbms_session_update_request_pP->mbms_session_duration.seconds, mce_config.mbms_mcch_modification_period_rf * 10000, TMGI_ARG(&mbms_session_update_request_pP->tmgi));
+    mbms_session_update_request_pP->mbms_session_duration.seconds = mce_config.mbms_mcch_modification_period_rf * 10000;
   }
   mce_config_unlock (&mce_config);
 
@@ -523,7 +523,7 @@ mce_app_handle_mbms_session_update_request(
   /**
    * Also transmit the MBMS IP, since new eNB may be added (changed of MBMS Service Area).
    */
-  mce_app_itti_m3ap_mbms_session_update_request(&mbms_session_update_request_pP->tmgi, new_mbms_service_area_id, old_mbms_service_area_id,
+  mce_app_itti_m2ap_mbms_session_update_request(&mbms_session_update_request_pP->tmgi, new_mbms_service_area_id, old_mbms_service_area_id,
   		&mbms_session_update_request_pP->mbms_bearer_level_qos, &mbms_service->privates.fields.mbms_bc.mbms_ip_mc_distribution,
 			mbms_session_update_request_pP->abs_update_time.sec_since_epoch, mbms_session_update_request_pP->abs_update_time.usec);
 
@@ -595,7 +595,7 @@ mce_app_handle_mbms_session_stop_request(
   if(!mbms_session_stop_request_pP->abs_stop_time.sec_since_epoch || mbms_session_stop_request_pP->mbms_flags.lmri) {
   	OAILOG_INFO(LOG_MCE_APP, "No MBMS session stop time is given for TMGI " TMGI_FMT ". Stopping immediately and informing the MCE over M3. \n", TMGI_ARG(&mbms_service->privates.fields.tmgi));
   	mbms_service_idx = mce_get_mbms_service_index(&mbms_service->privates.fields.tmgi, mbms_service->privates.fields.mbms_service_area_id);
-  	mce_app_itti_m3ap_mbms_session_stop_request(&mbms_service->privates.fields.tmgi, mbms_service->privates.fields.mbms_service_area_id, (mbms_session_stop_request_pP->mbms_flags.lmri));
+  	mce_app_itti_m2ap_mbms_session_stop_request(&mbms_service->privates.fields.tmgi, mbms_service->privates.fields.mbms_service_area_id, (mbms_session_stop_request_pP->mbms_flags.lmri));
     mce_app_stop_mbms_service(&mbms_service->privates.fields.tmgi, mbms_service->privates.fields.mbms_service_area_id, mbms_session_stop_request_pP->teid, NULL);
   }
   OAILOG_FUNC_OUT (LOG_MCE_APP);
@@ -603,8 +603,8 @@ mce_app_handle_mbms_session_stop_request(
 
 //------------------------------------------------------------------------------
 void
- mce_app_handle_m3ap_enb_setup_request(
-     itti_m3ap_enb_setup_req_t * const m3ap_enb_setup_req_p)
+ mce_app_handle_m2ap_enb_setup_request(
+     itti_m2ap_enb_setup_req_t * const m2ap_enb_setup_req_p)
 {
   OAILOG_FUNC_IN (LOG_MCE_APP);
   mbsfn_areas_t									mbsfn_areas = {0};
@@ -612,11 +612,30 @@ void
   /**
    * Check if an MBSFN area for the eNB exists, if so give it back.
    */
-  mce_app_reset_m2_enb_registration(m3ap_enb_setup_req_p->m2ap_enb_id, m3ap_enb_setup_req_p->sctp_assoc);
-  int local_mbms_service_area = mce_app_get_local_mbsfn_areas(&m3ap_enb_setup_req_p->mbms_service_areas,  m3ap_enb_setup_req_p->m2ap_enb_id, m3ap_enb_setup_req_p->sctp_assoc, &mbsfn_areas);
-  mce_app_get_global_mbsfn_areas(&m3ap_enb_setup_req_p->mbms_service_areas, m3ap_enb_setup_req_p->m2ap_enb_id, m3ap_enb_setup_req_p->sctp_assoc, &mbsfn_areas, local_mbms_service_area);
+  mce_app_reset_m2_enb_registration(m2ap_enb_setup_req_p->m2ap_enb_id, m2ap_enb_setup_req_p->sctp_assoc);
+  int local_mbms_service_area = mce_app_get_local_mbsfn_areas(&m2ap_enb_setup_req_p->mbms_service_areas,  m2ap_enb_setup_req_p->m2ap_enb_id, m2ap_enb_setup_req_p->sctp_assoc, &mbsfn_areas);
+  mce_app_get_global_mbsfn_areas(&m2ap_enb_setup_req_p->mbms_service_areas, m2ap_enb_setup_req_p->m2ap_enb_id, m2ap_enb_setup_req_p->sctp_assoc, &mbsfn_areas, local_mbms_service_area);
   /** Send the resulting MBSFN areas for the eNB back. */
-  mce_app_itti_m3ap_enb_setup_response(&mbsfn_areas,local_mbms_service_area, m3ap_enb_setup_req_p->m2ap_enb_id, m3ap_enb_setup_req_p->sctp_assoc);
+  mce_app_itti_m2ap_enb_setup_response(&mbsfn_areas,local_mbms_service_area, m2ap_enb_setup_req_p->m2ap_enb_id, m2ap_enb_setup_req_p->sctp_assoc);
+  OAILOG_FUNC_OUT (LOG_MCE_APP);
+}
+
+//------------------------------------------------------------------------------
+void
+ mce_app_handle_m3ap_mce_setup_request(
+     itti_m3ap_mce_setup_req_t * const m3ap_mce_setup_req_p)
+{
+  OAILOG_FUNC_IN (LOG_MCE_APP);
+  mbsfn_areas_t									mbsfn_areas = {0};
+
+  /**
+   * Check if an MBSFN area for the eNB exists, if so give it back.
+   */
+  mce_app_reset_m3_mce_registration(m3ap_mce_setup_req_p->m3ap_mce_global_id, m3ap_mce_setup_req_p->sctp_assoc);
+  int local_mbms_service_area = mce_app_get_local_mbsfn_areas(&m3ap_mce_setup_req_p->mbms_service_areas,  m3ap_mce_setup_req_p->m3ap_mce_global_id,m3ap_mce_setup_req_p->sctp_assoc, &mbsfn_areas);
+  mce_app_get_global_mbsfn_areas(&m3ap_mce_setup_req_p->mbms_service_areas, m3ap_mce_setup_req_p->m3ap_mce_global_id, m3ap_mce_setup_req_p->sctp_assoc, &mbsfn_areas, local_mbms_service_area);
+  /** Send the resulting MBSFN areas for the eNB back. */
+  mce_app_itti_m3ap_mce_setup_response(&mbsfn_areas,local_mbms_service_area, m3ap_mce_setup_req_p->m3ap_mce_global_id, m3ap_mce_setup_req_p->sctp_assoc);
   OAILOG_FUNC_OUT (LOG_MCE_APP);
 }
 
@@ -642,15 +661,15 @@ mce_app_handle_mbsfn_mcch_repetition_timeout_timer_expiry (hash_table_ts_t * con
 	 * Below is an absolute value of the MBSFN Sycn Area common MCCH repetition timer.
 	 */
 	mce_config_read_lock (&mce_config);
-	uint8_t mbms_global_mbsfn_area_per_local_group = mce_config.mbms.mbms_global_mbsfn_area_per_local_group;
-	uint8_t max_mbms_local_areas = mce_config.mbms.mbms_local_service_areas;
-	mbsfn_area_ids_t 	mbsfn_area_id_clusters[mce_config.mbms.mbms_local_service_areas +1]; /**< O: non-local global MBMS areas. */
+	uint8_t mbms_global_mbsfn_area_per_local_group = mce_config.mbms_global_mbsfn_area_per_local_group;
+	uint8_t max_mbms_local_areas = mce_config.mbms_local_service_areas;
+	mbsfn_area_ids_t 	mbsfn_area_id_clusters[mce_config.mbms_local_service_areas +1]; /**< O: non-local global MBMS areas. */
 	memset((void*)mbsfn_area_id_clusters, 0, sizeof(mbsfn_area_id_clusters));
-	mbsfn_areas_t mbsfn_clusters_to_schedule[mce_config.mbms.mbms_local_service_areas +1];
+	mbsfn_areas_t mbsfn_clusters_to_schedule[mce_config.mbms_local_service_areas +1];
 	memset((void*)mbsfn_clusters_to_schedule, 0, sizeof(mbsfn_clusters_to_schedule));
 	/** Set the MBSFN areas to 0. */
 	mce_app_desc.mcch_repetition_period++; // todo: wrap up to 0?
-	mcch_rep_abs_rf = (long)(mce_config.mbms.mbms_mcch_repetition_period_rf * mce_app_desc.mcch_repetition_period); /**< Your actual RF (also absolute). */
+	mcch_rep_abs_rf = (long)(mce_config.mbms_mcch_repetition_period_rf * mce_app_desc.mcch_repetition_period); /**< Your actual RF (also absolute). */
 	memset((void*)&mce_app_desc.mcch_repetition_period_tv, 0, sizeof(mce_app_desc.mcch_repetition_period_tv));
 	gettimeofday(&mce_app_desc.mcch_repetition_period_tv, NULL);
 	pthread_rwlock_unlock(&mce_app_desc.rw_lock);
@@ -794,7 +813,7 @@ mce_app_handle_mbsfn_mcch_repetition_timeout_timer_expiry (hash_table_ts_t * con
 		OAILOG_INFO(LOG_MCE_APP, "Found (%d) MBSFN areas for MCCH absolute modification period (%d) for scheduling!\n",
   			mbsfn_areas_to_be_scheduled, mcch_rep_abs_rf);
   	/** Transmit all of them to the M2AP layer. */
-  	mce_app_itti_m3ap_send_mbms_scheduling_info(mbsfn_clusters_to_schedule, max_mbms_local_areas + 1, mcch_rep_abs_rf);
+  	mce_app_itti_m2ap_send_mbms_scheduling_info(mbsfn_clusters_to_schedule, max_mbms_local_areas + 1, mcch_rep_abs_rf);
   	// todo: guarantee, that we area bit before the MBSFN
   } else {
   	OAILOG_INFO(LOG_MCE_APP, "No MBSFN areas to be scheduled for MCCH modification absolute period (%d).\n", mcch_rep_abs_rf);
@@ -847,7 +866,7 @@ mce_app_handle_mbms_session_duration_timer_expiry (const struct tmgi_s *tmgi, co
      */
     OAILOG_INFO(LOG_MCE_APP, "MBMS Service stopped after timeout. This only applies if the Stopping the MBMS Service for TMGI " TMGI_FMT " immediately. Informing the MCE over M3. \n", TMGI_ARG(&mbms_service->privates.fields.tmgi));
     /** M3AP Session Stop Request --> No Response is expected. Immediately terminate the MBMS Service afterwards. */
-    mce_app_itti_m3ap_mbms_session_stop_request(&mbms_service->privates.fields.tmgi, mbms_service->privates.fields.mbms_service_area_id, true);
+    mce_app_itti_m2ap_mbms_session_stop_request(&mbms_service->privates.fields.tmgi, mbms_service->privates.fields.mbms_service_area_id, true);
     mce_app_stop_mbms_service(tmgi, mbms_service_area_id, mbms_service->privates.fields.mme_teid_sm, (struct sockaddr*)&mbms_service->privates.fields.mbms_peer_ip);
   } else {
     /**
@@ -963,8 +982,8 @@ int mce_app_check_mbsfn_cluster_capacity(const mbms_service_index_t mbms_service
 
 	/** Initialize the list of local MBMS services. */
 	mce_config_read_lock (&mce_config);
-	mbms_service_index_t * mbms_service_indexes_total_array[mce_config.mbms.max_mbms_services];
-	memset(mbms_service_indexes_total_array, 0, sizeof(mbms_service_index_t) * mce_config.mbms.max_mbms_services);
+	mbms_service_index_t * mbms_service_indexes_total_array[mce_config.max_mbms_services];
+	memset(mbms_service_indexes_total_array, 0, sizeof(mbms_service_index_t) * mce_config.max_mbms_services);
 	mce_config_unlock(&mce_config);
 
 	/** Check the capacity in the merged MBMS services. */
@@ -1030,14 +1049,14 @@ int mce_app_check_shared_resources(const mbms_service_index_t mbms_service_index
 	 * Remove any other MBMS services implicitly in the M2AP layer.
 	 */
 	mce_config_read_lock (&mce_config);
-	max_mbms_local_areas = mce_config.mbms.mbms_local_service_areas;
+	max_mbms_local_areas = mce_config.mbms_local_service_areas;
 	mbsfn_area_ids_t mbsfn_areas_to_be_checked[max_mbms_local_areas +1]; /**< O: non-local global MBMS areas. */
 	/** Set the MBSFN areas to 0. */
 	memset((void*)mbsfn_areas_to_be_checked, 0, (max_mbms_local_areas +1) * sizeof(mbsfn_area_ids_t));
-	local_global_areas_allowed = mce_config.mbms.mbms_global_mbsfn_area_per_local_group;
+	local_global_areas_allowed = mce_config.mbms_global_mbsfn_area_per_local_group;
 	/** Initialize the list of global MBMS service indexes, too. */
-	mbms_service_index_t mbms_service_indexes_active_array[mce_config.mbms.max_mbms_services];
-	memset(mbms_service_indexes_active_array, 0, sizeof(mbms_service_index_t) * mce_config.mbms.max_mbms_services);
+	mbms_service_index_t mbms_service_indexes_active_array[mce_config.max_mbms_services];
+	memset(mbms_service_indexes_active_array, 0, sizeof(mbms_service_index_t) * mce_config.max_mbms_services);
 	/** Set the MBSFN areas to 0. */
 	mbms_service_indexes_active_nlg.mbms_service_index_array = mbms_service_indexes_active_array;
 	mce_config_unlock(&mce_config);
@@ -1097,8 +1116,8 @@ int mce_app_check_shared_resources(const mbms_service_index_t mbms_service_index
   															 *mbms_service_indexes_active_local_p = &mbms_service_indexes_active_local;
   	/** Initialize the list of local MBMS services. */
 		mce_config_read_lock (&mce_config);
-		mbms_service_index_t mbms_service_indexes_active_array[mce_config.mbms.max_mbms_services];
-		memset(mbms_service_indexes_active_array, 0, sizeof(mbms_service_index_t) * mce_config.mbms.max_mbms_services);
+		mbms_service_index_t mbms_service_indexes_active_array[mce_config.max_mbms_services];
+		memset(mbms_service_indexes_active_array, 0, sizeof(mbms_service_index_t) * mce_config.max_mbms_services);
 		/** Set the MBSFN areas to 0. */
 		mbms_service_indexes_active_local.mbms_service_index_array = mbms_service_indexes_active_array;
 		mce_config_unlock(&mce_config);
@@ -1164,8 +1183,8 @@ int mce_app_check_mbms_service_resources(const mbms_service_index_t mbms_service
 		mbms_service_indexes_t mbms_service_indexes_tbr				= {0};
 		/** Clear the MBMS Service Indexes. */
 		mce_config_read_lock (&mce_config);
-		mbms_service_index_t * mbms_service_indexes_tbr_array[mce_config.mbms.max_mbms_services];
-		memset(mbms_service_indexes_tbr_array, 0, sizeof(mbms_service_index_t) * mce_config.mbms.max_mbms_services);
+		mbms_service_index_t * mbms_service_indexes_tbr_array[mce_config.max_mbms_services];
+		memset(mbms_service_indexes_tbr_array, 0, sizeof(mbms_service_index_t) * mce_config.max_mbms_services);
 		/** Set the MBSFN areas to 0. */
 		mbms_service_indexes_tbr.mbms_service_index_array = mbms_service_indexes_tbr_array;
 		mce_config_unlock(&mce_config);
@@ -1184,7 +1203,7 @@ int mce_app_check_mbms_service_resources(const mbms_service_index_t mbms_service
 		 			OAILOG_WARNING(LOG_MCE_APP, "MBMS Service for TMGI " TMGI_FMT " with ARP prio (%d) will be implicitly removed for new MBMS Service request with MBMS Service Index "MBMS_SERVICE_INDEX_FMT". \n",
 		 					TMGI_ARG(&mbms_service_tbr->privates.fields.tmgi), mbms_service_tbr->privates.fields.mbms_bc.eps_bearer_context.bearer_level_qos.pl, mbms_service_index);
 		 			/** Remove the MBMS session. */
-		 			mce_app_itti_m3ap_mbms_session_stop_request(&mbms_service_tbr->privates.fields.tmgi, mbms_service_tbr->privates.fields.mbms_service_area_id, 0);
+		 			mce_app_itti_m2ap_mbms_session_stop_request(&mbms_service_tbr->privates.fields.tmgi, mbms_service_tbr->privates.fields.mbms_service_area_id, 0);
 		 			mce_app_stop_mbms_service(&mbms_service_tbr->privates.fields.tmgi,
 		 					mbms_service_tbr->privates.fields.mbms_service_area_id, mbms_service_tbr->privates.fields.mme_teid_sm,
 							(struct sockaddr*)&mbms_service_tbr->privates.fields.mbms_peer_ip); /**< Remove the Sm tunnel, too, since no Sm message will be send. */

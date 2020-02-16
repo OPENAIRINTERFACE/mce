@@ -100,7 +100,7 @@ m2ap_timer_insert (
   new->mce_mbms_m2ap_id = mce_mbms_m2ap_id;
 
   if (RB_INSERT (m2ap_timer_map, &m2ap_timer_tree, new) != NULL) {
-    OAILOG_WARNING (LOG_S1AP, "Timer with id 0x%lx already exists\n", timer_id);
+    OAILOG_WARNING (LOG_M2AP, "Timer with id 0x%lx already exists\n", timer_id);
     free_wrapper ((void**)&new);
     return -1;
   }
@@ -121,7 +121,7 @@ m2ap_handle_timer_expiry (
 //  elm.timer_id = timer_has_expired->timer_id;
 //
 //  if ((find = RB_FIND (m2ap_timer_map, &m2ap_timer_tree, &elm)) == NULL) {
-//    OAILOG_WARNING (LOG_S1AP, "Timer id 0x%lx has not been found in tree. Maybe the timer " "reference has been removed before receiving timer signal\n", timer_has_expired->timer_id);
+//    OAILOG_WARNING (LOG_M2AP, "Timer id 0x%lx has not been found in tree. Maybe the timer " "reference has been removed before receiving timer signal\n", timer_has_expired->timer_id);
 //    return 0;
 //  }
 //

@@ -69,6 +69,7 @@ typedef struct mce_app_desc_s {
    */
 
   uint32_t               nb_m2ap_enb_connected;
+  uint32_t               nb_m3ap_mce_connected;
   uint32_t               nb_mbms_services;
   uint32_t               nb_mbms_m1u_bearers;
 
@@ -81,6 +82,8 @@ typedef struct mce_app_desc_s {
   uint32_t               nb_mbms_m1u_bearers_released_since_last_stat;
   uint32_t               nb_m2ap_enb_connected_since_last_stat;
   uint32_t               nb_m2ap_enb_released_since_last_stat;
+  uint32_t               nb_m3ap_mce_connected_since_last_stat;
+  uint32_t               nb_m3ap_mce_released_since_last_stat;
 } mce_app_desc_t;
 
 extern mce_app_desc_t mce_app_desc;
@@ -93,7 +96,9 @@ bool mce_app_dump_mbms_service(const hash_key_t keyP, void *const mbms_service, 
 void mce_app_handle_mbms_session_start_request( itti_sm_mbms_session_start_request_t * const mbms_session_start_pP );
 void mce_app_handle_mbms_session_update_request( itti_sm_mbms_session_update_request_t * const mbms_session_update_pP );
 void mce_app_handle_mbms_session_stop_request( itti_sm_mbms_session_stop_request_t * const mbms_session_stop_pP );
-void mce_app_handle_m3ap_enb_setup_request(itti_m3ap_enb_setup_req_t * const m3ap_enb_setup_req_p);
+
+void mce_app_handle_m2ap_enb_setup_request(itti_m2ap_enb_setup_req_t * const m2ap_enb_setup_req_p);
+void mce_app_handle_m3ap_mce_setup_request(itti_m3ap_mce_setup_req_t * const m3ap_mce_setup_req_p);
 
 //------------------------------------------------------------------------------
 void mce_app_handle_mbsfn_mcch_repetition_timeout_timer_expiry (hash_table_ts_t * const mcch_mbsfn_cfg_htbl);

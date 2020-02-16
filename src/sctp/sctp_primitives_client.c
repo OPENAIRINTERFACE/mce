@@ -37,7 +37,7 @@
 #include "sctp_eNB_defs.h"
 #include "sctp_common.h"
 #include "sctp_primitives_client.h"
-#include "mme_default_values.h"
+#include "mce_default_values.h"
 #include "log.h"
 
 /* Send buffer to SCTP association */

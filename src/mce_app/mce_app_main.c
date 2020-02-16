@@ -48,6 +48,7 @@
 #include "mce_app_statistics.h"
 #include "common_defs.h"
 #include "m2ap_mce.h"
+#include "m3ap_mme.h"
 
 mce_app_desc_t                          mce_app_desc = {.rw_lock = PTHREAD_RWLOCK_INITIALIZER, 0} ;
 
@@ -101,9 +102,16 @@ void *mce_app_thread (void *args)
     }
     break;
 
-    case M3AP_ENB_SETUP_REQUEST:{
-    	mce_app_handle_m3ap_enb_setup_request(
-			&M3AP_ENB_SETUP_REQUEST(received_message_p)
+    case M2AP_ENB_SETUP_REQUEST:{
+    	mce_app_handle_m2ap_enb_setup_request(
+			&M2AP_ENB_SETUP_REQUEST(received_message_p)
+    	);
+    }
+    break;
+
+    case M3AP_MCE_SETUP_REQUEST:{
+    	mce_app_handle_m3ap_mce_setup_request(
+			&M3AP_MCE_SETUP_REQUEST(received_message_p)
     	);
     }
     break;
@@ -146,11 +154,11 @@ void *mce_app_thread (void *args)
     		mbms_service_index_t mbms_service_idx = ((mbms_service_index_t)(received_message_p->ittiMsg.timer_has_expired.arg));
     		mbms_service_t * mbms_service = mce_mbms_service_exists_mbms_service_index(&mce_app_desc.mce_mbms_service_contexts, mbms_service_idx);
     		if (mbms_service == NULL) {
-    			OAILOG_WARNING (LOG_MME_APP, "Timer expired but no associated MBMS Service for MBMS Service idx " MBMS_SERVICE_INDEX_FMT "\n", mbms_service_idx);
+    			OAILOG_WARNING (LOG_MCE_APP, "Timer expired but no associated MBMS Service for MBMS Service idx " MBMS_SERVICE_INDEX_FMT "\n", mbms_service_idx);
     			break;
     		}
     		if(mbms_service->mbms_procedure) {
-    			OAILOG_WARNING (LOG_MME_APP, "TIMER_HAS_EXPIRED with ID %u and FOR MBMS Service with TMGI " TMGI_FMT ". \n",
+    			OAILOG_WARNING (LOG_MCE_APP, "TIMER_HAS_EXPIRED with ID %u and FOR MBMS Service with TMGI " TMGI_FMT ". \n",
     					received_message_p->ittiMsg.timer_has_expired.timer_id, TMGI_ARG(&mbms_service->privates.fields.tmgi));
     			// MBMS Session timer expiry handler
     			mce_app_handle_mbms_session_duration_timer_expiry(&mbms_service->privates.fields.tmgi, mbms_service->privates.fields.mbms_service_area_id);
@@ -181,7 +189,7 @@ static bool
 mce_initialize_mcch_repetition_timer() {
 	// todo: calculate the MCCH repetition timer!
 	/** Start the MCCH timer for the MBSFN MCCH. */
-	int mcch_timer_us = mce_config.mbms.mbms_mcch_repetition_period_rf * 10000;
+	int mcch_timer_us = mce_config.mbms_mcch_repetition_period_rf * 10000;
 	int mcch_timer_s  = floor(mcch_timer_us / 1000000);
 	mcch_timer_us = mcch_timer_us % 1000000;
 	// todo: set the offset && clear the synchronized with the eNBs.. (set another timer to set the timer?!)
@@ -191,11 +199,11 @@ mce_initialize_mcch_repetition_timer() {
   bdestroy_wrapper(&b);
 	if (timer_setup (mcch_timer_s, mcch_timer_us,
 			TASK_MCE_APP, INSTANCE_DEFAULT, TIMER_PERIODIC, (void*)mcch_mbsfn_cfg_htbl, &mce_app_desc.mcch_repetition_timer_id) < 0) {
-			OAILOG_ERROR (LOG_MME_APP, "Failed to create the generic MCCH repetition timer for duration of (%d) RFs. \n",
-					mce_config.mbms.mbms_mcch_repetition_period_rf);
+			OAILOG_ERROR (LOG_MCE_APP, "Failed to create the generic MCCH repetition timer for duration of (%d) RFs. \n",
+					mce_config.mbms_mcch_repetition_period_rf);
 			return false;
 	}
-	OAILOG_ERROR (LOG_MME_APP, "Started the MCCH repetition timer for duration of %d RFs. \n", mce_config.mbms.mbms_mcch_repetition_period_rf);
+	OAILOG_ERROR (LOG_MCE_APP, "Started the MCCH repetition timer for duration of %d RFs. \n", mce_config.mbms_mcch_repetition_period_rf);
 	/** Upon expiration, invalidate the timer.. no flag needed. */
 	return true;
 }
@@ -208,11 +216,11 @@ int mce_app_init (const mce_config_t * mce_config_p)
   memset (&mce_app_desc, 0, sizeof (mce_app_desc));
   // todo: (from develop)   pthread_rwlock_init (&mce_app_desc.rw_lock, NULL); && where to unlock it?
   bstring b = bfromcstr("mce_app_mbms_service_id_mbms_service_htbl");
-  mce_app_desc.mce_mbms_service_contexts.mbms_service_index_mbms_service_htbl = hashtable_ts_create (mce_config.mbms.max_mbms_services, NULL, hash_free_int_func, b);
+  mce_app_desc.mce_mbms_service_contexts.mbms_service_index_mbms_service_htbl = hashtable_ts_create (mce_config.max_mbms_services, NULL, hash_free_int_func, b);
   btrunc(b, 0);
 
   bassigncstr(b, "mce_app_tunsm_mbms_service_htbl");
-  mce_app_desc.mce_mbms_service_contexts.tunsm_mbms_service_htbl = hashtable_uint64_ts_create (mce_config.mbms.max_mbms_services, NULL, b);
+  mce_app_desc.mce_mbms_service_contexts.tunsm_mbms_service_htbl = hashtable_uint64_ts_create (mce_config.max_mbms_services, NULL, b);
   AssertFatal(sizeof(uintptr_t) >= sizeof(uint64_t), "Problem with tunsm_mbms_service_htbl in MCE_APP");
   btrunc(b, 0);
 
@@ -292,13 +300,13 @@ int mce_app_init (const mce_config_t * mce_config_p)
     OAILOG_FUNC_RETURN (LOG_MCE_APP, RETURNerror);
   }
 
-  mce_app_desc.statistic_timer_period = mce_config_p->mme_statistic_timer;
+  mce_app_desc.statistic_timer_period = mce_config_p->mce_statistic_timer;
 
   /*
    * Request for periodic timer
    */
-  if (timer_setup (mce_config_p->mme_statistic_timer, 0, TASK_MCE_APP, INSTANCE_DEFAULT, TIMER_PERIODIC, NULL, &mce_app_desc.statistic_timer_id) < 0) {
-    OAILOG_ERROR (LOG_MCE_APP, "Failed to request new timer for statistics with %ds " "of periodicity\n", mce_config_p->mme_statistic_timer);
+  if (timer_setup (mce_config_p->mce_statistic_timer, 0, TASK_MCE_APP, INSTANCE_DEFAULT, TIMER_PERIODIC, NULL, &mce_app_desc.statistic_timer_id) < 0) {
+    OAILOG_ERROR (LOG_MCE_APP, "Failed to request new timer for statistics with %ds " "of periodicity\n", mce_config_p->mce_statistic_timer);
     mce_app_desc.statistic_timer_id = 0;
   }
 
@@ -319,18 +327,16 @@ int mce_app_init (const mce_config_t * mce_config_p)
 //------------------------------------------------------------------------------
 void mce_app_exit (void)
 {
+  hash_table_ts_t * mcch_mbsfn_cfg_table = NULL;
   // todo: also check other timers!
   timer_remove(mce_app_desc.statistic_timer_id, NULL);
   /** Remove the hashmap of last stored MBSFN configurations, too. */
-  timer_remove(mce_app_desc.mcch_repetition_timer_id, NULL);
-  hash_table_ts_t * mcch_mbsfn_cfg_table = NULL;
   timer_remove (mce_app_desc.mcch_repetition_timer_id, (void**)&mcch_mbsfn_cfg_table);
   if (mcch_mbsfn_cfg_table) {
   	OAILOG_INFO(LOG_MCE_APP, "Received an MCCH modification MBSFN area configuration hashmap from removed MCCH modification timer. Destroying.. \n");
   	/** Destroy the hashtable. */
   	hashtable_rc_t hash_rc = hashtable_ts_destroy(mcch_mbsfn_cfg_table);
   	DevAssert(hash_rc == HASH_TABLE_OK);
-  	DevAssert(!mcch_mbsfn_cfg_table);
   }
   hashtable_uint64_ts_destroy (mce_app_desc.mce_mbms_service_contexts.tunsm_mbms_service_htbl);
   hashtable_ts_destroy (mce_app_desc.mce_mbms_service_contexts.mbms_service_index_mbms_service_htbl);

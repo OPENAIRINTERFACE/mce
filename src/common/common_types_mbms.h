@@ -32,6 +32,7 @@
 #include <arpa/inet.h>
 #include "bstrlib.h"
 #include "3gpp_36.443.h"
+#include "3gpp_36.444.h"
 #include "common_types.h"
 
 //------------------------------------------------------------------------------
@@ -53,6 +54,7 @@
 #define MBMS_SERVICE_AREA_ID_FMT	 "0x%"PRIx16
 typedef uint64_t                 	 mbms_service_index_t;
 
+/** M2AP */
 #define INVALID_ENB_MBMS_M2AP_ID_KEY UINT32_MAX
 #define MCE_MBMS_M2AP_ID_MASK        0xFFFFFF
 #define ENB_MBMS_M2AP_ID_MASK        0x00FFFF
@@ -60,6 +62,15 @@ typedef uint64_t                 	 mbms_service_index_t;
 #define MCE_MBMS_M2AP_ID_FMT         "%"PRIx32
 #define INVALID_MCE_MBMS_M2AP_ID     0xFFFFFF            // You can pick any value between 0..2^24-1,
 #define INVALID_ENB_MBMS_M2AP_ID     0xFFFF		         // You can pick any value between 0..2^16-1,
+
+/** M3AP */
+#define INVALID_MCE_MBMS_M3AP_ID_KEY UINT16_MAX
+#define MME_MBMS_M3AP_ID_MASK        0xFFFF
+#define MCE_MBMS_M3AP_ID_MASK        0xFFFF
+#define MME_MBMS_M3AP_ID_FMT         "%06"PRIx16
+#define MCE_MBMS_M3AP_ID_FMT         "%06"PRIx16
+#define INVALID_MME_MBMS_M3AP_ID     0xFFFF            // You can pick any value between 0..2^16-1,
+#define INVALID_MCE_MBMS_M3AP_ID     0xFFFF		         // You can pick any value between 0..2^16-1,
 
 // TMGI
 #define TMGI_FMT PLMN_FMT"|%04x"
@@ -487,7 +498,7 @@ typedef struct mbsfn_area_s{
 #define CSA_PATTERN_REPETITION_MIN 32
 #define COMMON_CSA_PATTERN				 7
 #define MBSFN_AREA_MAX_CSA_PATTERN (COMMON_CSA_PATTERN+1)
-#define MME_CONFIG_MAX_LOCAL_MBMS_SERVICE_AREAS 3
+#define MCE_CONFIG_MAX_LOCAL_MBMS_SERVICE_AREAS 3
   uint16_t								mbsfn_csa_period_rf;
   uint8_t 								mbms_mcch_msi_mcs;
   double								  mch_mcs_enb_factor;

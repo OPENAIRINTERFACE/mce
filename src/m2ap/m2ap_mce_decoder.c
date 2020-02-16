@@ -56,7 +56,7 @@ int m2ap_mce_decode_pdu(M2AP_M2AP_PDU_t *pdu, const_bstring const raw)
                         0);
 
   if (dec_ret.code != RC_OK) {
-    OAILOG_ERROR (LOG_S1AP, "Failed to decode PDU\n");
+    OAILOG_ERROR (LOG_M2AP, "Failed to decode PDU\n");
     return -1;
   }
   return 0;

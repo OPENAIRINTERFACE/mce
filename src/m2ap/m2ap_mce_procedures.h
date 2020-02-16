@@ -35,7 +35,7 @@
  **/
 void
 m2ap_handle_mbms_session_start_request (
-  const itti_m3ap_mbms_session_start_req_t * const mbms_session_start_req_pP);
+  const itti_m2ap_mbms_session_start_req_t * const mbms_session_start_req_pP);
 
 /** \brief Handle MBMS Session Stop Request from the MCE_APP.
  **/
@@ -47,7 +47,7 @@ m2ap_handle_mbms_session_stop_request (
  **/
 void
 m2ap_handle_mbms_session_update_request (
-  const itti_m3ap_mbms_session_update_req_t * const mbms_session_update_req_pP);
+  const itti_m2ap_mbms_session_update_req_t * const mbms_session_update_req_pP);
 
 /** \brief Trigger an MBMS Session Stop Request from the MCE_APP.
  **/
@@ -56,7 +56,7 @@ int m2ap_generate_mbms_session_stop_request(mce_mbms_m2ap_id_t mce_mbms_m2ap_id,
 /** \brief Trigger an MBMS Scheduling Information from the MCE_APP.
  *  No need to check for active MBMS services in the M2AP layer. Messages will be sent independently.
  **/
-int m2ap_handle_m3ap_mbms_scheduling_info(itti_m3ap_mbms_scheduling_info_t * m3ap_mbms_scheduling_info);
+int m2ap_handle_m2ap_mbms_scheduling_info(itti_m2ap_mbms_scheduling_info_t * m2ap_mbms_scheduling_info);
 
 /** \brief Handles M2AP Timeouts.
  **/

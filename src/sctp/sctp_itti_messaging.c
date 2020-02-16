@@ -70,7 +70,7 @@ sctp_itti_send_new_association (
   sctp_new_peer_p->assoc_id = assoc_id;
   sctp_new_peer_p->instreams = instreams;
   sctp_new_peer_p->outstreams = outstreams;
-  return itti_send_msg_to_task (TASK_S1AP, INSTANCE_DEFAULT, message_p);
+  return itti_send_msg_to_task (TASK_M2AP, INSTANCE_DEFAULT, message_p);
 }
 
 //------------------------------------------------------------------------------
@@ -89,7 +89,7 @@ int sctp_itti_send_new_message_ind(
     SCTP_DATA_IND (message_p).assoc_id   = assoc_id;
     SCTP_DATA_IND (message_p).instreams  = instreams;
     SCTP_DATA_IND (message_p).outstreams = outstreams;
-    return itti_send_msg_to_task (TASK_S1AP, INSTANCE_DEFAULT, message_p);
+    return itti_send_msg_to_task (TASK_M2AP, INSTANCE_DEFAULT, message_p);
   }
   return RETURNerror;
 }
@@ -105,5 +105,5 @@ sctp_itti_send_com_down_ind (
   message_p = itti_alloc_new_message (TASK_SCTP, SCTP_CLOSE_ASSOCIATION);
   sctp_close_association_p = &message_p->ittiMsg.sctp_close_association;
   sctp_close_association_p->assoc_id = assoc_id;
-  return itti_send_msg_to_task (TASK_S1AP, INSTANCE_DEFAULT, message_p);
+  return itti_send_msg_to_task (TASK_M2AP, INSTANCE_DEFAULT, message_p);
 }

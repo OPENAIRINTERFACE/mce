@@ -56,17 +56,17 @@ m2ap_mce_compare_mbms_sa_list(
     M2AP_MBMS_Service_Area_t * mbms_sa = &mbms_sa_list->list.array[j];
     OCTET_STRING_TO_MBMS_SA (mbms_sa, mbms_sa_value);
     /** Check if it is a global MBMS SAI. */
-    if(mbms_sa_value <= mce_config.mbms.mbms_global_service_area_types) {
+    if(mbms_sa_value <= mce_config.mbms_global_service_area_types) {
       /** Global MBMS Service Area Id received. */
-      OAILOG_INFO(LOG_MME_APP, "Found a matching global MBMS Service Area ID " MBMS_SERVICE_AREA_ID_FMT ". \n", mbms_sa_value);
+      OAILOG_INFO(LOG_MCE_APP, "Found a matching global MBMS Service Area ID " MBMS_SERVICE_AREA_ID_FMT ". \n", mbms_sa_value);
       return MBMS_SA_LIST_AT_LEAST_ONE_MATCH;
     }
     /** Check if it is in bounds for the local service areas. */
-    int val = mbms_sa_value - mce_config.mbms.mbms_global_service_area_types + 1;
-    int local_area = val / mce_config.mbms.mbms_local_service_area_types;
-    int local_area_type = val % mce_config.mbms.mbms_local_service_area_types;
-    if(local_area < mce_config.mbms.mbms_local_service_areas){
-    	OAILOG_INFO(LOG_MME_APP, "Found a valid MBMS Service Area ID " MBMS_SERVICE_AREA_ID_FMT ". \n", mbms_sa_value);
+    int val = mbms_sa_value - mce_config.mbms_global_service_area_types + 1;
+    int local_area = val / mce_config.mbms_local_service_area_types;
+    int local_area_type = val % mce_config.mbms_local_service_area_types;
+    if(local_area < mce_config.mbms_local_service_areas){
+    	OAILOG_INFO(LOG_MCE_APP, "Found a valid MBMS Service Area ID " MBMS_SERVICE_AREA_ID_FMT ". \n", mbms_sa_value);
     	return MBMS_SA_LIST_AT_LEAST_ONE_MATCH;
     }
   }
@@ -84,12 +84,12 @@ m2ap_mce_combare_mbms_plmn(
 
   mce_config_read_lock (&mce_config);
   /*Verify that the MME code within S-TMSI is same as what is configured in MME conf*/
-  if ((plmn.mcc_digit2 == mce_config.mbms.mce_plmn.mcc_digit2) &&
-  		(plmn.mcc_digit1 == mce_config.mbms.mce_plmn.mcc_digit1) &&
-			(plmn.mnc_digit3 == mce_config.mbms.mce_plmn.mnc_digit3) &&
-			(plmn.mcc_digit3 == mce_config.mbms.mce_plmn.mcc_digit3) &&
-			(plmn.mnc_digit2 == mce_config.mbms.mce_plmn.mnc_digit2) &&
-			(plmn.mnc_digit1 == mce_config.mbms.mce_plmn.mnc_digit1))
+  if ((plmn.mcc_digit2 == mce_config.gumcei.gumcei[0].plmn.mcc_digit2) &&
+  		(plmn.mcc_digit1 == mce_config.gumcei.gumcei[0].plmn.mcc_digit1) &&
+			(plmn.mnc_digit3 == mce_config.gumcei.gumcei[0].plmn.mnc_digit3) &&
+			(plmn.mcc_digit3 == mce_config.gumcei.gumcei[0].plmn.mcc_digit3) &&
+			(plmn.mnc_digit2 == mce_config.gumcei.gumcei[0].plmn.mnc_digit2) &&
+			(plmn.mnc_digit1 == mce_config.gumcei.gumcei[0].plmn.mnc_digit1))
   {
 	  rc = MBMS_SA_LIST_RET_OK;
   }

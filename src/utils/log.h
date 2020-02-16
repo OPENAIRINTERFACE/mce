@@ -84,30 +84,20 @@ extern int fd_g_debug_lvl;
 #define LOG_CONFIG_STRING_ASYNC_SYSTEM_LOG_LEVEL         "ASYNC_SYSTEM"
 #define LOG_CONFIG_STRING_COLOR                          "COLOR"
 #define LOG_CONFIG_STRING_OUTPUT_CONSOLE                 "CONSOLE"
-#define LOG_CONFIG_STRING_GTPV1U_LOG_LEVEL               "GTPV1U_LOG_LEVEL"
 #define LOG_CONFIG_STRING_GTPV2C_LOG_LEVEL               "GTPV2C_LOG_LEVEL"
 #define LOG_CONFIG_STRING_ITTI_LOG_LEVEL                 "ITTI_LOG_LEVEL"
 #define LOG_CONFIG_STRING_LOGGING                        "LOGGING"
-#define LOG_CONFIG_STRING_MME_APP_LOG_LEVEL              "MME_APP_LOG_LEVEL"
 #define LOG_CONFIG_STRING_MCE_APP_LOG_LEVEL              "MCE_APP_LOG_LEVEL"
-#define LOG_CONFIG_STRING_MME_SCENARIO_PLAYER_LOG_LEVEL  "MME_SCENARIO_PLAYER_LOG_LEVEL"
+#define LOG_CONFIG_STRING_M2AP_LOG_LEVEL                 "M2AP_LOG_LEVEL"
+#define LOG_CONFIG_STRING_M3AP_LOG_LEVEL                 "M3AP_LOG_LEVEL"
 #define LOG_CONFIG_STRING_MSC_LOG_LEVEL                  "MSC_LOG_LEVEL"
-#define LOG_CONFIG_STRING_NAS_LOG_LEVEL                  "NAS_LOG_LEVEL"
 #define LOG_CONFIG_STRING_OUTPUT                         "OUTPUT"
-#define LOG_CONFIG_STRING_S10_LOG_LEVEL                  "S10_LOG_LEVEL"
-#define LOG_CONFIG_STRING_S11_LOG_LEVEL                  "S11_LOG_LEVEL"
 #define LOG_CONFIG_STRING_SM_LOG_LEVEL                   "SM_LOG_LEVEL"
-#define LOG_CONFIG_STRING_S1AP_LOG_LEVEL                 "S1AP_LOG_LEVEL"
-#define LOG_CONFIG_STRING_S6A_LOG_LEVEL                  "S6A_LOG_LEVEL"
-#define LOG_CONFIG_STRING_SECU_LOG_LEVEL                 "SECU_LOG_LEVEL"
 #define LOG_CONFIG_STRING_SCTP_LOG_LEVEL                 "SCTP_LOG_LEVEL"
-#define LOG_CONFIG_STRING_SPGW_APP_LOG_LEVEL             "SPGW_APP_LOG_LEVEL"
-#define LOG_CONFIG_STRING_SPGW_APP_LOG_LEVEL             "SPGW_APP_LOG_LEVEL"
 #define LOG_CONFIG_STRING_OUTPUT_SYSLOG                  "SYSLOG"
 #define LOG_CONFIG_STRING_OUTPUT_THREAD_SAFE             "THREAD_SAFE"
 #define LOG_CONFIG_STRING_UDP_LOG_LEVEL                  "UDP_LOG_LEVEL"
 #define LOG_CONFIG_STRING_UTIL_LOG_LEVEL                 "UTIL_LOG_LEVEL"
-#define LOG_CONFIG_STRING_XML_LOG_LEVEL                  "XML_LOG_LEVEL"
 
 typedef enum {
   MIN_LOG_ENV = 0,
@@ -134,27 +124,15 @@ typedef enum {
 typedef enum {
   MIN_LOG_PROTOS = 0,
   LOG_UDP = MIN_LOG_PROTOS,
-  LOG_GTPV1U,
   LOG_GTPV2C,
   LOG_SCTP,
-  LOG_S1AP,
   LOG_M2AP,
-  LOG_MME_APP,
+	LOG_M3AP,
   LOG_MCE_APP,
-  LOG_NAS,
-  LOG_NAS_EMM,
-  LOG_NAS_ESM,
-  LOG_SPGW_APP,
-  LOG_S10,
-  LOG_S11,
   LOG_SM,
-  LOG_S6A,
-  LOG_SECU,
   LOG_UTIL,
   LOG_CONFIG,
   LOG_MSC,
-  LOG_XML,
-  LOG_MME_SCENARIO_PLAYER,
   LOG_ITTI,
   LOG_ASYNC_SYSTEM,
   MAX_LOG_PROTOS,
@@ -186,26 +164,16 @@ typedef struct log_config_s {
   bstring       output;             /*!< \brief Where logs go, choice in { "CONSOLE", "`path to file`", "`IPv4@`:`TCP port num`"} . */
   bool          is_output_thread_safe; /*!< \brief Is final string goes in a thread safe buffer of is flushed without care . */
   log_level_t   udp_log_level;      /*!< \brief UDP ITTI task log level starting from OAILOG_LEVEL_EMERGENCY up to MAX_LOG_LEVEL (no log) */
-  log_level_t   gtpv1u_log_level;   /*!< \brief GTPv1-U ITTI task log level starting from OAILOG_LEVEL_EMERGENCY up to MAX_LOG_LEVEL (no log) */
   log_level_t   gtpv2c_log_level;   /*!< \brief GTPv2-C ITTI task log level starting from OAILOG_LEVEL_EMERGENCY up to MAX_LOG_LEVEL (no log) */
   log_level_t   sctp_log_level;     /*!< \brief SCTP ITTI task log level starting from OAILOG_LEVEL_EMERGENCY up to MAX_LOG_LEVEL (no log) */
-  log_level_t   s1ap_log_level;     /*!< \brief S1AP ITTI task log level starting from OAILOG_LEVEL_EMERGENCY up to MAX_LOG_LEVEL (no log) */
-  log_level_t   nas_log_level;      /*!< \brief NAS ITTI task log level starting from OAILOG_LEVEL_EMERGENCY up to MAX_LOG_LEVEL (no log) */
-  log_level_t   mme_app_log_level;  /*!< \brief MME-APP ITTI task log level starting from OAILOG_LEVEL_EMERGENCY up to MAX_LOG_LEVEL (no log) */
-  log_level_t   spgw_app_log_level; /*!< \brief SP-GW ITTI task log level starting from OAILOG_LEVEL_EMERGENCY up to MAX_LOG_LEVEL (no log) */
-  log_level_t   s10_log_level;      /*!< \brief S10 ITTI task log level starting from OAILOG_LEVEL_EMERGENCY up to MAX_LOG_LEVEL (no log) */
-  log_level_t   s11_log_level;      /*!< \brief S11 ITTI task log level starting from OAILOG_LEVEL_EMERGENCY up to MAX_LOG_LEVEL (no log) */
-  log_level_t   s6a_log_level;      /*!< \brief S6a layer log level starting from OAILOG_LEVEL_EMERGENCY up to MAX_LOG_LEVEL (no log) */
-  log_level_t   secu_log_level;     /*!< \brief LTE security log level starting from OAILOG_LEVEL_EMERGENCY up to MAX_LOG_LEVEL (no log) */
   log_level_t   util_log_level;     /*!< \brief Misc utilities log level starting from OAILOG_LEVEL_EMERGENCY up to MAX_LOG_LEVEL (no log) */
   /** MBMSM Logs. */
   log_level_t   m2ap_log_level;     /*!< \brief M2AP ITTI task log level starting from OAILOG_LEVEL_EMERGENCY up to MAX_LOG_LEVEL (no log) */
+  log_level_t   m3ap_log_level;     /*!< \brief M3AP ITTI task log level starting from OAILOG_LEVEL_EMERGENCY up to MAX_LOG_LEVEL (no log) */
   log_level_t   mce_app_log_level;  /*!< \brief MCE-APP ITTI task log level starting from OAILOG_LEVEL_EMERGENCY up to MAX_LOG_LEVEL (no log) */
   log_level_t   sm_log_level;       /*!< \brief Sm ITTI task log level starting from OAILOG_LEVEL_EMERGENCY up to MAX_LOG_LEVEL (no log) */
 
   log_level_t   msc_log_level;      /*!< \brief MSC utility log level starting from OAILOG_LEVEL_EMERGENCY up to MAX_LOG_LEVEL (no log) */
-  log_level_t   xml_log_level;      /*!< \brief XML dump/load of messages (mainly for MME scenario player) log level starting from OAILOG_LEVEL_EMERGENCY up to MAX_LOG_LEVEL (no log) */
-  log_level_t   mme_scenario_player_log_level; /*!< \brief scenario player log level starting from OAILOG_LEVEL_EMERGENCY up to MAX_LOG_LEVEL (no log) */
   log_level_t   async_system_log_level; /*!< \brief async system log level starting from OAILOG_LEVEL_EMERGENCY up to MAX_LOG_LEVEL (no log) */
   log_level_t   itti_log_level;     /*!< \brief ITTI layer log level starting from OAILOG_LEVEL_EMERGENCY up to MAX_LOG_LEVEL (no log) */
   uint8_t       asn1_verbosity_level; /*!< \brief related to asn1c generated code for S1AP verbosity level */

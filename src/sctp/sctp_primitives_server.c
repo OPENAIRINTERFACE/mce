@@ -525,7 +525,7 @@ static int sctp_handle_com_down (sctp_assoc_id_t assoc_id)
   OAILOG_DEBUG (LOG_SCTP, "Sending close connection for assoc_id %u\n", assoc_id);
 
   if (sctp_itti_send_com_down_ind (assoc_id) < 0) {
-    OAILOG_ERROR (LOG_SCTP, "Failed to send message to TASK_S1AP\n");
+    OAILOG_ERROR (LOG_SCTP, "Failed to send message to TASK_M2AP\n");
   }
 
   if (sctp_remove_assoc_from_list (assoc_id) < 0) {

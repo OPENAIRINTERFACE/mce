@@ -9,6 +9,7 @@ include_directories(${SRC_TOP_DIR}/utils/hashtable)
 # TODO (amar) fix include leak
 include_directories("${SRC_TOP_DIR}/mce_app")
 include_directories("${SRC_TOP_DIR}/m2ap")
+include_directories("${SRC_TOP_DIR}/m3ap")
 
 set(ITTI_FILES
       # add .h files if depend on (this one is generated)

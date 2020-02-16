@@ -31,8 +31,10 @@
 int mce_app_statistics_display(void);
 
 /*********************************** Utility Functions to update Statistics**************************************/
-void update_mce_app_stats_connected_enb_add(void);
-void update_mce_app_stats_connected_enb_sub(void);
+void update_mce_app_stats_connected_m2ap_enb_add(void);
+void update_mce_app_stats_connected_m2ap_enb_sub(void);
+void update_mme_app_stats_connected_m3ap_mce_add(void);
+void update_mme_app_stats_connected_m3ap_mce_sub(void);
 void update_mce_app_stats_active_mbms_service_add(void);
 void update_mce_app_stats_active_mbms_service_sub(void);
 void update_mce_app_stats_m1u_bearer_add(void);

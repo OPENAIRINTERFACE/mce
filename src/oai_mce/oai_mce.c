@@ -154,18 +154,26 @@ main (
   MSC_INIT (MSC_MME, THREAD_MAX + TASK_MAX);
   CHECK_INIT_RETURN (sctp_init (&mce_config));
   CHECK_INIT_RETURN (udp_init ());
-  OAILOG_DEBUG(LOG_MME_APP, "MME app initialization of mandatory interfaces complete.\n");
+  OAILOG_DEBUG(LOG_MCE_APP, "MCE app initialization of mandatory interfaces complete.\n");
 
+  /** Initialize M2AP.*/
   CHECK_INIT_RETURN (m2ap_mce_init ());
+  CHECK_INIT_RETURN (m3ap_mme_init ());
+  /** Initialize SM. */
   CHECK_INIT_RETURN (sm_mce_init (&mce_config));
+  /** Initialize MCE_APP. */
   CHECK_INIT_RETURN (mce_app_init (&mce_config));
-  /** Activate it right away. */
+  /** Activate M2AP layer right away. */
   MessageDef                             *message_p;
-  OAILOG_NOTICE(LOG_MME_APP, "Activating MBMS layer..\n");
-  message_p = itti_alloc_new_message (TASK_MME_APP, ACTIVATE_MESSAGE);
+  OAILOG_NOTICE(LOG_MCE_APP, "Activating M2AP layer..\n");
+  message_p = itti_alloc_new_message (TASK_M2AP, ACTIVATE_MESSAGE);
   itti_send_msg_to_task (TASK_M2AP, INSTANCE_DEFAULT, message_p);
+  /** Activate M3AP layer right away. */
+  OAILOG_NOTICE(LOG_MCE_APP, "Activating M3AP layer..\n");
+  message_p = itti_alloc_new_message (TASK_M3AP, ACTIVATE_MESSAGE);
+  itti_send_msg_to_task (TASK_M3AP, INSTANCE_DEFAULT, message_p);
 
-  OAILOG_DEBUG(LOG_MME_APP, "MME app initialization of optional interfaces complete. \n");
+  OAILOG_DEBUG(LOG_MCE_APP, "MCE app initialization of optional interfaces complete. \n");
 
   /*
    * Handle signals here

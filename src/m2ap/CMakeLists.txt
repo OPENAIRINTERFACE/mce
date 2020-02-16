@@ -26,6 +26,8 @@ include_directories("${SRC_TOP_DIR}/mce_app")
 set(M2AP_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 include_directories("${M2AP_DIR}")
 
+## M2AP
+
 execute_process(COMMAND ${asn1c_call} ${M2AP_C_DIR} ${M2AP_ASN_FILES})
 file(GLOB M2AP_source ${M2AP_C_DIR}/*.c)
 
@@ -51,15 +53,21 @@ add_library(M2AP_LIB
     ${M2AP_source}
     m2ap_common.c
     )
-
+    
+## M2AP
 
 add_library(M2AP_EPC
     ${M2AP_DIR}/m2ap_mce_encoder.c
     ${M2AP_DIR}/m2ap_mce_decoder.c
     ${M2AP_DIR}/m2ap_mce_handlers.c
     ${M2AP_DIR}/m2ap_mce_procedures.c
+    ${M2AP_DIR}/m2ap_mce_procedures.c
+    ${M2AP_DIR}/m2ap_mce.c
     ${M2AP_DIR}/m2ap_mce.c
     ${M2AP_DIR}/m2ap_mce_itti_messaging.c
+    ${M2AP_DIR}/m2ap_mce_itti_messaging.c
     ${M2AP_DIR}/m2ap_mce_retransmission.c
+    ${M2AP_DIR}/m2ap_mce_retransmission.c
+    ${M2AP_DIR}/m2ap_mce_mbms_sa.c
     ${M2AP_DIR}/m2ap_mce_mbms_sa.c
     )

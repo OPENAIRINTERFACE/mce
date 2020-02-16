@@ -56,14 +56,14 @@
 mce_app_mbms_proc_t * mce_app_create_mbms_procedure(mbms_service_t * const mbms_service,
   long abs_start_time_in_sec, long abs_start_time_usec, const mbms_session_duration_t * const mbms_session_duration)
 {
-  OAILOG_FUNC_IN (LOG_MME_APP);
+  OAILOG_FUNC_IN (LOG_MCE_APP);
 
   mce_app_mbms_proc_t 				*mbms_proc    = NULL;
   /** Check if the list of Sm procedures is empty. */
   if(mbms_service->mbms_procedure){
-  	OAILOG_ERROR (LOG_MME_APP, "MBMS Service with TMGI " TMGI_FMT " has already a MBMS procedure ongoing. Cannot create new MBMS procedure. \n",
+  	OAILOG_ERROR (LOG_MCE_APP, "MBMS Service with TMGI " TMGI_FMT " has already a MBMS procedure ongoing. Cannot create new MBMS procedure. \n",
   			TMGI_ARG(&mbms_service->privates.fields.tmgi));
-  	OAILOG_FUNC_RETURN(LOG_MME_APP, NULL);
+  	OAILOG_FUNC_RETURN(LOG_MCE_APP, NULL);
   }
 
   /**
@@ -85,9 +85,9 @@ mce_app_mbms_proc_t * mce_app_create_mbms_procedure(mbms_service_t * const mbms_
   	mbms_proc->trigger_mbms_session_stop = true;
   	DevAssert(abs_start_time_in_sec);
   }
-  else if(mce_config.mbms.mbms_short_idle_session_duration_in_sec >= mbms_session_duration->seconds){
-  	OAILOG_INFO(LOG_MME_APP, "MBMS Session procedure for MBMS Service-Index " MBMS_SERVICE_INDEX_FMT " has session duration (%ds) is shorter/equal than the minimum (%ds). \n",
-  			mbms_service_idx, mbms_session_duration->seconds, mce_config.mbms.mbms_short_idle_session_duration_in_sec);
+  else if(mce_config.mbms_short_idle_session_duration_in_sec >= mbms_session_duration->seconds){
+  	OAILOG_INFO(LOG_MCE_APP, "MBMS Session procedure for MBMS Service-Index " MBMS_SERVICE_INDEX_FMT " has session duration (%ds) is shorter/equal than the minimum (%ds). \n",
+  			mbms_service_idx, mbms_session_duration->seconds, mce_config.mbms_short_idle_session_duration_in_sec);
   	mbms_proc->trigger_mbms_session_stop = true;
   }
   mce_config_unlock (&mce_config);
@@ -126,16 +126,16 @@ mce_app_mbms_proc_t * mce_app_create_mbms_procedure(mbms_service_t * const mbms_
   if (timer_setup (mbms_session_duration->seconds + delta_to_start_in_sec, abs_start_time_usec,
     TASK_MCE_APP, INSTANCE_DEFAULT, TIMER_ONE_SHOT,  (void *) (mbms_service_idx), &(mbms_proc->timer.id)) < 0)
   {
-	  OAILOG_ERROR (LOG_MME_APP, "Failed to start the MME MBMS Session timer for MBMS Service Idx " MBMS_SERVICE_INDEX_FMT " for duration %ds \n",
+	  OAILOG_ERROR (LOG_MCE_APP, "Failed to start the MME MBMS Session timer for MBMS Service Idx " MBMS_SERVICE_INDEX_FMT " for duration %ds \n",
 	  		mbms_service_idx, mbms_session_duration->seconds);
 	  mbms_proc->timer.id = MCE_APP_TIMER_INACTIVE_ID;
 	  mbms_proc->trigger_mbms_session_stop = false;
 	  free_wrapper(&mbms_proc);
-	  OAILOG_FUNC_RETURN(LOG_MME_APP, NULL);
+	  OAILOG_FUNC_RETURN(LOG_MCE_APP, NULL);
   }
   mbms_service->mbms_procedure = mbms_proc;
   /** Initialize the of the procedure. */
-  OAILOG_FUNC_RETURN(LOG_MME_APP, mbms_proc);
+  OAILOG_FUNC_RETURN(LOG_MCE_APP, mbms_proc);
 }
 
 //------------------------------------------------------------------------------
@@ -148,10 +148,10 @@ void mce_app_delete_mbms_procedure(const mbms_service_t * mbms_service)
 
   if(mbms_service->mbms_procedure->timer.id != MCE_APP_TIMER_INACTIVE_ID){
     if (timer_remove(mbms_service->mbms_procedure->timer.id, NULL)) {
-      OAILOG_ERROR (LOG_MME_APP, "Failed to stop the procedure timer for -MMME MBMS Service Start with TMGI " TMGI_FMT ". \n", TMGI_ARG(&mbms_service->privates.fields.tmgi));
+      OAILOG_ERROR (LOG_MCE_APP, "Failed to stop the procedure timer for -MMME MBMS Service Start with TMGI " TMGI_FMT ". \n", TMGI_ARG(&mbms_service->privates.fields.tmgi));
       mbms_service->mbms_procedure->timer.id = MCE_APP_TIMER_INACTIVE_ID;
     }else{
-      OAILOG_DEBUG(LOG_MME_APP, "Successfully removed timer for -MMME MBMS Service Start for TMGI " TMGI_FMT ". \n", TMGI_ARG(&mbms_service->privates.fields.tmgi));
+      OAILOG_DEBUG(LOG_MCE_APP, "Successfully removed timer for -MMME MBMS Service Start for TMGI " TMGI_FMT ". \n", TMGI_ARG(&mbms_service->privates.fields.tmgi));
     }
   }
   free_wrapper(&mbms_service->mbms_procedure);

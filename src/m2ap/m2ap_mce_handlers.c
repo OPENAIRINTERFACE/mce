@@ -260,7 +260,7 @@ m2ap_mce_handle_m2_setup_request (
   }
 
   mce_config_read_lock (&mce_config);
-  max_m2_enb_connected = mce_config.mbms.max_m2_enbs;
+  max_m2_enb_connected = mce_config.max_m2_enbs;
   mce_config_unlock (&mce_config);
 
   if (nb_m2ap_enb_associated >= max_m2_enb_connected) {
@@ -290,7 +290,7 @@ m2ap_mce_handle_m2_setup_request (
     uint8_t *enb_id_buf = ie->value.choice.GlobalENB_ID.eNB_ID.choice.short_Macro_eNB_ID.buf;
     if (ie->value.choice.GlobalENB_ID.eNB_ID.choice.short_Macro_eNB_ID.size != 18) {
       //TODO: handle case were size != 18 -> notify ? reject ?
-      OAILOG_DEBUG (LOG_S1AP, "M2-Setup-Request shortENB_ID.size %lu (should be 18)\n", ie->value.choice.GlobalENB_ID.eNB_ID.choice.short_Macro_eNB_ID.size);
+      OAILOG_DEBUG (LOG_M2AP, "M2-Setup-Request shortENB_ID.size %lu (should be 18)\n", ie->value.choice.GlobalENB_ID.eNB_ID.choice.short_Macro_eNB_ID.size);
     }
     m2ap_enb_id = (enb_id_buf[0] << 10) + (enb_id_buf[1] << 2) + ((enb_id_buf[2] & 0xc0) >> 6);
     OAILOG_MESSAGE_ADD (context, "short eNB id: %07x", m2ap_enb_id);
@@ -298,7 +298,7 @@ m2ap_mce_handle_m2_setup_request (
   	uint8_t *enb_id_buf = ie->value.choice.GlobalENB_ID.eNB_ID.choice.long_Macro_eNB_ID.buf;
   	if (ie->value.choice.GlobalENB_ID.eNB_ID.choice.long_Macro_eNB_ID.size != 22) {
   		//TODO: handle case were size != 21 -> notify ? reject ?
-  		OAILOG_DEBUG (LOG_S1AP, "M2-Setup-Request longENB_ID.size %lu (should be 21)\n", ie->value.choice.GlobalENB_ID.eNB_ID.choice.long_Macro_eNB_ID.size);
+  		OAILOG_DEBUG (LOG_M2AP, "M2-Setup-Request longENB_ID.size %lu (should be 21)\n", ie->value.choice.GlobalENB_ID.eNB_ID.choice.long_Macro_eNB_ID.size);
   	}
   	m2ap_enb_id = (enb_id_buf[0] << 13) + (enb_id_buf[1] << 5) + ((enb_id_buf[2] & 0xf8) >> 3);
   	OAILOG_MESSAGE_ADD (context, "long eNB id: %07x", m2ap_enb_id);
@@ -356,7 +356,7 @@ m2ap_mce_handle_m2_setup_request (
   }
 
   mce_config_read_lock (&mce_config);
-  int mbsfn_synch_area_id = mce_config.mbms.mbsfn_synch_area_id;
+  int mbsfn_synch_area_id = mce_config.mbsfn_synch_area_id;
   mce_config_unlock (&mce_config);
 
   if(m2ap_enb_mbms_cfg_item->mbsfnSynchronisationArea != mbsfn_synch_area_id){
@@ -421,7 +421,7 @@ m2ap_mce_handle_m2_setup_request (
    * For the case of a new eNB, forward the M2 Setup Request to MCE_APP.
    * It needs the information to create and manage MBSFN areas.
    */
-  m2ap_mce_itti_m3ap_enb_setup_request(assoc_id, m2ap_enb_id, &m2ap_enb_association->mbms_sa_list);
+  m2ap_mce_itti_m2ap_enb_setup_request(assoc_id, m2ap_enb_id, &m2ap_enb_association->mbms_sa_list);
   OAILOG_FUNC_RETURN (LOG_M2AP, rc);
 }
 
@@ -456,7 +456,7 @@ m2ap_generate_m2_setup_response (
   ie->id = M2AP_ProtocolIE_ID_id_GlobalMCE_ID;
   ie->criticality = M2AP_Criticality_ignore;
   ie->value.present = M2AP_M2SetupResponse_IEs__value_PR_GlobalMCE_ID;
-  INT16_TO_OCTET_STRING (mce_config.mbms.mce_id, &ie->value.choice.GlobalMCE_ID.mCE_ID);
+  INT16_TO_OCTET_STRING (mce_config.gumcei.gumcei[0].mce_gid, &ie->value.choice.GlobalMCE_ID.mCE_ID);
   mce_config_unlock (&mce_config);
 
 //  M2AP_PLMN_Identity_t                    *plmn = NULL;
@@ -466,7 +466,7 @@ m2ap_generate_m2_setup_response (
   uint16_t                                mnc = 0;
   uint16_t                                mnc_len = 0;
   /** Get the integer values from the PLMN. */
-  PLMN_T_TO_MCC_MNC ((mce_config.mbms.mce_plmn), mcc, mnc, mnc_len);
+  PLMN_T_TO_MCC_MNC ((mce_config.gumcei.gumcei[0].plmn), mcc, mnc, mnc_len);
   MCC_MNC_TO_PLMNID (mcc, mnc, mnc_len,	&ie->value.choice.GlobalMCE_ID.pLMN_Identity);
   /** Use same MME code for MCE ID for all eNBs. */
   ASN_SEQUENCE_ADD(&out->protocolIEs.list, ie);
@@ -520,41 +520,41 @@ m2ap_generate_m2_setup_response (
 }
 
 //------------------------------------------------------------------------------
-int m2ap_handle_m3ap_enb_setup_res(itti_m3ap_enb_setup_res_t * m3ap_enb_setup_res){
+int m2ap_handle_m2ap_enb_setup_res(itti_m2ap_enb_setup_res_t * m2ap_enb_setup_res){
 	int														rc = RETURNerror;
 	m2ap_enb_description_t 			*m2ap_enb_association = NULL;
 
 	OAILOG_FUNC_IN(LOG_M2AP);
 
-	m2ap_enb_association = m2ap_is_enb_assoc_id_in_list(m3ap_enb_setup_res->sctp_assoc);
+	m2ap_enb_association = m2ap_is_enb_assoc_id_in_list(m2ap_enb_setup_res->sctp_assoc);
   if(!m2ap_enb_association) {
-    OAILOG_ERROR (LOG_M2AP, "No eNB association found for %d. Cannot trigger M2 setup response. \n", m3ap_enb_setup_res->sctp_assoc);
+    OAILOG_ERROR (LOG_M2AP, "No eNB association found for %d. Cannot trigger M2 setup response. \n", m2ap_enb_setup_res->sctp_assoc);
     OAILOG_FUNC_RETURN(LOG_M2AP, rc);
   }
 
   /** Nothing extra is to be done for the MBSFNs. MCE_APP takes care of it. */
-  if(!m3ap_enb_setup_res->mbsfn_areas.num_mbsfn_areas){
-  	OAILOG_ERROR (LOG_M2AP, "No MBSFN area could be associated for eNB %d. M2 Setup failed. \n", m3ap_enb_setup_res->sctp_assoc);
+  if(!m2ap_enb_setup_res->mbsfn_areas.num_mbsfn_areas){
+  	OAILOG_ERROR (LOG_M2AP, "No MBSFN area could be associated for eNB %d. M2 Setup failed. \n", m2ap_enb_setup_res->sctp_assoc);
 		rc = m2ap_mce_generate_m2_setup_failure (m2ap_enb_association->sctp_assoc_id, M2AP_ENB_SERVICE_SCTP_STREAM_ID,
 				M2AP_Cause_PR_misc, M2AP_CauseMisc_unspecified, -1); /**< eNB should attach again. */
 		OAILOG_FUNC_RETURN(LOG_M2AP, rc);
   }
 	m2ap_dump_enb (m2ap_enb_association);
-  OAILOG_INFO(LOG_M2AP, "MBSFN area could be associated for eNB %d. M2 Setup succeeded. \n", m3ap_enb_setup_res->sctp_assoc);
+  OAILOG_INFO(LOG_M2AP, "MBSFN area could be associated for eNB %d. M2 Setup succeeded. \n", m2ap_enb_setup_res->sctp_assoc);
   /**
    * Update the MBSFN and MBMS areas.
    */
-  m2ap_enb_association->local_mbms_area = m3ap_enb_setup_res->local_mbms_area;
-  for(int num_mbsfn = 0; num_mbsfn < m3ap_enb_setup_res->mbsfn_areas.num_mbsfn_areas; num_mbsfn++) {
+  m2ap_enb_association->local_mbms_area = m2ap_enb_setup_res->local_mbms_area;
+  for(int num_mbsfn = 0; num_mbsfn < m2ap_enb_setup_res->mbsfn_areas.num_mbsfn_areas; num_mbsfn++) {
   	/** Set it in the M2 ENB Description element. */
   	m2ap_enb_association->mbsfn_area_ids.mbsfn_area_id[m2ap_enb_association->mbsfn_area_ids.num_mbsfn_area_ids] =
-  			m3ap_enb_setup_res->mbsfn_areas.mbsfn_area_cfg[num_mbsfn].mbsfnArea.mbsfn_area_id;
+  			m2ap_enb_setup_res->mbsfn_areas.mbsfn_area_cfg[num_mbsfn].mbsfnArea.mbsfn_area_id;
   	m2ap_enb_association->mbsfn_area_ids.mbms_service_area_id[m2ap_enb_association->mbsfn_area_ids.num_mbsfn_area_ids] =
-  			m3ap_enb_setup_res->mbsfn_areas.mbsfn_area_cfg[num_mbsfn].mbsfnArea.mbms_service_area_id;
+  			m2ap_enb_setup_res->mbsfn_areas.mbsfn_area_cfg[num_mbsfn].mbsfnArea.mbms_service_area_id;
   	m2ap_enb_association->mbsfn_area_ids.num_mbsfn_area_ids++;
   }
 
-  rc =  m2ap_generate_m2_setup_response (m2ap_enb_association, &m3ap_enb_setup_res->mbsfn_areas);
+  rc =  m2ap_generate_m2_setup_response (m2ap_enb_association, &m2ap_enb_setup_res->mbsfn_areas);
   if (rc == RETURNok) {
   	update_mce_app_stats_connected_m2ap_enb_add();
   }
@@ -823,7 +823,7 @@ m2ap_mce_handle_reset_request (
   M2AP_Reset_Ies_t				     *ie = NULL;
   mbms_description_t                 *mbms_ref_p = NULL;
   m2ap_enb_description_t			 *m2ap_enb_association = NULL;
-  itti_m3ap_enb_initiated_reset_ack_t m3ap_enb_initiated_reset_ack = {0};
+  itti_m2ap_enb_initiated_reset_ack_t m2ap_enb_initiated_reset_ack = {0};
 
   OAILOG_FUNC_IN (LOG_M2AP);
   /*
@@ -840,36 +840,36 @@ m2ap_mce_handle_reset_request (
     OAILOG_INFO (LOG_M2AP, "M2 setup is not done.Invalid state.Ignoring ENB Initiated Reset.eNB Id = %d , M2AP state = %d \n", m2ap_enb_association->m2ap_enb_id, m2ap_enb_association->m2_state);
     OAILOG_FUNC_RETURN (LOG_M2AP, RETURNok);
   }
-  // Check the reset type - partial_reset OR M2AP_RESET_ALL
+  // Check the reset type - partial_reset OR MxAP_RESET_ALL
   container = &pdu->choice.initiatingMessage.value.choice.Reset;
   M2AP_FIND_PROTOCOLIE_BY_ID(M2AP_Reset_Ies_t, ie, container, M2AP_ProtocolIE_ID_id_ResetType, true);
   M2AP_ResetType_t * m2ap_reset_type = &ie->value.choice.ResetType;
   switch (m2ap_reset_type->present){
     case M2AP_ResetType_PR_m2_Interface:
-      m3ap_enb_initiated_reset_ack.m2ap_reset_type = M2AP_RESET_ALL;
+      m2ap_enb_initiated_reset_ack.m2ap_reset_type = MxAP_RESET_ALL;
 	  break;
     case M2AP_ResetType_PR_partOfM2_Interface:
-    	m3ap_enb_initiated_reset_ack.m2ap_reset_type = M2AP_RESET_PARTIAL;
+    	m2ap_enb_initiated_reset_ack.m2ap_reset_type = MxAP_RESET_PARTIAL;
   	  break;
     default:
 	  OAILOG_ERROR (LOG_M2AP, "Reset Request from M2AP eNB  with Invalid reset_type = %d\n", m2ap_reset_type->present);
 	  // TBD - Here MME should send Error Indication as it is abnormal scenario.
 	  OAILOG_FUNC_RETURN (LOG_M2AP, RETURNerror);
   }
-  m3ap_enb_initiated_reset_ack.sctp_assoc_id 	= assoc_id;
-  m3ap_enb_initiated_reset_ack.sctp_stream_id 	= stream;
+  m2ap_enb_initiated_reset_ack.sctp_assoc_id 	= assoc_id;
+  m2ap_enb_initiated_reset_ack.sctp_stream_id 	= stream;
   /** Create a cleared array of identifiers. */
-  if (m3ap_enb_initiated_reset_ack.m2ap_reset_type != M2AP_RESET_ALL) {
+  if (m2ap_enb_initiated_reset_ack.m2ap_reset_type != MxAP_RESET_ALL) {
 	// Check if there are no MBMSs connected
 	if (!m2ap_enb_association->nb_mbms_associated) {
 	  // Ignore the message
 	  OAILOG_INFO (LOG_M2AP, "No MBMSs is active for eNB. Still continuing with eNB Initiated Reset.eNB Id = %d\n",
 		  m2ap_enb_association->m2ap_enb_id);
 	}
-	m3ap_enb_initiated_reset_ack.num_mbms = m2ap_reset_type->choice.partOfM2_Interface.list.count;
-	m2_sig_conn_id_t mbms_to_reset_list[m3ap_enb_initiated_reset_ack.num_mbms]; /**< Create a stacked array. */
-	memset(mbms_to_reset_list, 0, m3ap_enb_initiated_reset_ack.num_mbms * sizeof(m2_sig_conn_id_t));
-	for (int item = 0; item < m3ap_enb_initiated_reset_ack.num_mbms; item++) {
+	m2ap_enb_initiated_reset_ack.num_mbms = m2ap_reset_type->choice.partOfM2_Interface.list.count;
+	m2_sig_conn_id_t mbms_to_reset_list[m2ap_enb_initiated_reset_ack.num_mbms]; /**< Create a stacked array. */
+	memset(mbms_to_reset_list, 0, m2ap_enb_initiated_reset_ack.num_mbms * sizeof(m2_sig_conn_id_t));
+	for (int item = 0; item < m2ap_enb_initiated_reset_ack.num_mbms; item++) {
 	  M2AP_MBMS_Service_associatedLogicalM2_ConnectionItemResAck_t *m2_sig_conn_p = (M2AP_MBMS_Service_associatedLogicalM2_ConnectionItemResAck_t*)
 		ie->value.choice.ResetType.choice.partOfM2_Interface.list.array[item];
 	  /** Initialize each element with invalid values. */
@@ -926,12 +926,12 @@ m2ap_mce_handle_reset_request (
 		m2ap_enb_association->nb_mbms_associated--;
 	}
 	OAILOG_INFO(LOG_M2AP, "Successfully performed partial reset for M2AP eNB with sctp-assoc-id (%d). Sending back M2AP Reset ACK. \n", assoc_id);
-	m3ap_enb_initiated_reset_ack.mbsm_to_reset_list = mbms_to_reset_list;
-	m3ap_handle_enb_initiated_reset_ack(&m3ap_enb_initiated_reset_ack);	  /**< Array scope. */
+	m2ap_enb_initiated_reset_ack.mbsm_to_reset_list = mbms_to_reset_list;
+	m2ap_handle_enb_initiated_reset_ack(&m2ap_enb_initiated_reset_ack);	  /**< Array scope. */
  } else {
 	  /** Generating full reset request. */
 	  m2ap_enb_full_reset((void*)m2ap_enb_association);
-	  m3ap_handle_enb_initiated_reset_ack(&m3ap_enb_initiated_reset_ack); /**< Array scope. */
+	  m2ap_handle_enb_initiated_reset_ack(&m2ap_enb_initiated_reset_ack); /**< Array scope. */
 	  OAILOG_INFO (LOG_M2AP, "Received a full reset request from eNB with SCTP-ASSOC (%d). Removing all SCTP associations. Sending RESET ACK.\n", assoc_id);
   }
   OAILOG_FUNC_RETURN (LOG_M2AP, RETURNok);
@@ -1153,8 +1153,8 @@ m2ap_handle_new_association (
 
 //------------------------------------------------------------------------------
 int
-m3ap_handle_enb_initiated_reset_ack (
-  const itti_m3ap_enb_initiated_reset_ack_t * const m2ap_enb_reset_ack_p)
+m2ap_handle_enb_initiated_reset_ack (
+  const itti_m2ap_enb_initiated_reset_ack_t * const m2ap_enb_reset_ack_p)
 {
   uint8_t                                *buffer = NULL;
   uint32_t                                length = 0;
@@ -1174,7 +1174,7 @@ m3ap_handle_enb_initiated_reset_ack (
   pdu.choice.successfulOutcome.value.present = M2AP_SuccessfulOutcome__value_PR_ResetAcknowledge;
   out = &pdu.choice.successfulOutcome.value.choice.ResetAcknowledge;
 
-  if (m2ap_enb_reset_ack_p->m2ap_reset_type == M2AP_RESET_PARTIAL) {
+  if (m2ap_enb_reset_ack_p->m2ap_reset_type == MxAP_RESET_PARTIAL) {
     /** Add an Item for each counter. */
 	if(m2ap_enb_reset_ack_p->mbsm_to_reset_list){
 	  reset_ack_ie_list = (M2AP_ResetAcknowledge_Ies_t *)calloc(1, sizeof(M2AP_ResetAcknowledge_Ies_t));

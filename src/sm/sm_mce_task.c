@@ -242,9 +242,10 @@ sm_mce_thread (
     break;
 
     case TERMINATE_MESSAGE: {
-      sm_exit();
-      itti_exit_task ();
-      break;
+    	sm_exit();
+    	OAI_FPRINTF_INFO("TASK_SM terminated \n");
+    	itti_exit_task ();
+    	break;
     }
 
     default:{
@@ -318,7 +319,7 @@ sm_mce_init (
    */
   udp.hUdp = (nw_gtpv2c_udp_handle_t) NULL;
   mce_config_read_lock (&mce_config);
-  udp.gtpv2cStandardPort = mce_config.mbms.ip.port_sm;
+  udp.gtpv2cStandardPort = mce_config.ip.port_sm;
   mce_config_unlock (&mce_config);
   udp.udpDataReqCallback = sm_mce_send_udp_msg;
   DevAssert (NW_OK == nwGtpv2cSetUdpEntity (sm_mce_stack_handle, &udp));
@@ -340,10 +341,10 @@ sm_mce_init (
 
   DevAssert (NW_OK == nwGtpv2cSetLogLevel (sm_mce_stack_handle, NW_LOG_LEVEL_DEBG));
   /** Create 2 sockets, one for 2123 (received initial requests), another high port. */
-  sm_send_init_udp(&mce_config.mbms.ip.mc_mce_v4, &mce_config.mbms.ip.mc_mce_v6, udp.gtpv2cStandardPort); /**< Only low port (2123) is enough. */
+  sm_send_init_udp(&mce_config.ip.mc_mce_v4, &mce_config.ip.mc_mce_v6, udp.gtpv2cStandardPort); /**< Only low port (2123) is enough. */
 
   bstring b = bfromcstr("sm_mce_teid_2_gtv2c_teid_handle");
-  sm_mce_teid_2_gtv2c_teid_handle = hashtable_ts_create(mce_config_p->max_ues, HASH_TABLE_DEFAULT_HASH_FUNC, hash_free_int_func, b);
+  sm_mce_teid_2_gtv2c_teid_handle = hashtable_ts_create(mce_config_p->max_mbms_services, HASH_TABLE_DEFAULT_HASH_FUNC, hash_free_int_func, b);
   bdestroy_wrapper(&b);
 
   OAILOG_DEBUG (LOG_SM, "Initializing SM interface: DONE\n");

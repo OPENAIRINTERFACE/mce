@@ -19,25 +19,25 @@
  *      contact@openairinterface.org
  */
 
-/*! \file 3gpp_requirements_36.443.h
+/*! \file 3gpp_requirements_36.444.h
   \brief
-  \author Lionel Gauthier
-  \company Eurecom
-  \email: lionel.gauthier@eurecom.fr
+  \author Dincer Beken
+  \company blackned GmbH
+  \email: dbeken@blackned.de
 */
 
-#ifndef FILE_3GPP_REQUIREMENTS_36_443_SEEN
-#define FILE_3GPP_REQUIREMENTS_36_443_SEEN
+#ifndef FILE_3GPP_REQUIREMENTS_36_444_SEEN
+#define FILE_3GPP_REQUIREMENTS_36_444_SEEN
 
 #include "3gpp_requirements.h"
 #include "log.h"
 
-#define REQUIREMENT_3GPP_36_443(rElEaSe_sEcTiOn__OaImark) REQUIREMENT_3GPP_SPEC(LOG_S1AP, "Hit 3GPP TS 36_443"#rElEaSe_sEcTiOn__OaImark" : "rElEaSe_sEcTiOn__OaImark##_BRIEF"\n")
-#define NO_REQUIREMENT_3GPP_36_443(rElEaSe_sEcTiOn__OaImark) REQUIREMENT_3GPP_SPEC(LOG_S1AP, "#NOT IMPLEMENTED 3GPP TS 36_443"#rElEaSe_sEcTiOn__OaImark" : "rElEaSe_sEcTiOn__OaImark##_BRIEF"\n")
-#define NOT_REQUIREMENT_3GPP_36_443(rElEaSe_sEcTiOn__OaImark) REQUIREMENT_3GPP_SPEC(LOG_S1AP, "#NOT ASSERTED 3GPP TS 36_443"#rElEaSe_sEcTiOn__OaImark" : "rElEaSe_sEcTiOn__OaImark##_BRIEF"\n")
+#define REQUIREMENT_3GPP_36_444(rElEaSe_sEcTiOn__OaImark) REQUIREMENT_3GPP_SPEC(LOG_M2AP, "Hit 3GPP TS 36_444"#rElEaSe_sEcTiOn__OaImark" : "rElEaSe_sEcTiOn__OaImark##_BRIEF"\n")
+#define NO_REQUIREMENT_3GPP_36_444(rElEaSe_sEcTiOn__OaImark) REQUIREMENT_3GPP_SPEC(LOG_M2AP, "#NOT IMPLEMENTED 3GPP TS 36_444"#rElEaSe_sEcTiOn__OaImark" : "rElEaSe_sEcTiOn__OaImark##_BRIEF"\n")
+#define NOT_REQUIREMENT_3GPP_36_444(rElEaSe_sEcTiOn__OaImark) REQUIREMENT_3GPP_SPEC(LOG_M2AP, "#NOT ASSERTED 3GPP TS 36_444"#rElEaSe_sEcTiOn__OaImark" : "rElEaSe_sEcTiOn__OaImark##_BRIEF"\n")
 
 ////-----------------------------------------------------------------------------------------------------------------------
-//#define R10_8_3_3_2__2 "MME36.443R10_8.3.3.2_2: Successful Operation\
+//#define R10_8_3_3_2__2 "MME36.444R10_8.3.3.2_2: Successful Operation\
 //                                                                                                                        \
 //    The UE CONTEXT RELEASE COMMAND message shall contain the UE S1AP ID pair IE if available, otherwise the             \
 //    message shall contain the MME UE S1AP ID IE."                                                                                \
@@ -45,4 +45,4 @@
 //#define R10_8_3_3_2__2_BRIEF "UE CONTEXT RELEASE COMMAND contains UE S1AP ID pair IE or at least MME UE S1AP ID IE"
 
 
-#endif /* FILE_3GPP_REQUIREMENTS_36_443_SEEN */
+#endif /* FILE_3GPP_REQUIREMENTS_36_444_SEEN */

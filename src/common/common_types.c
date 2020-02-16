@@ -45,15 +45,6 @@
 #include "common_defs.h"
 #include "3gpp_29.274.h"
 
-/* Clear GUTI without free it */
-void clear_guti(guti_t * const guti) {memset(guti, 0, sizeof(guti_t));guti->m_tmsi = INVALID_TMSI;}
-/* Clear IMSI without free it */
-void clear_imsi(imsi_t * const imsi){memset(imsi, 0, sizeof(imsi_t));}
-/* Clear IMEI without free it */
-void clear_imei(imei_t * const imei){memset(imei, 0, sizeof(imei_t));}
-/* Clear IMEISV without free it */
-void clear_imeisv(imeisv_t * const imeisv){memset(imeisv, 0, sizeof(imeisv_t));}
-
 //------------------------------------------------------------------------------
 bstring fteid_ip_address_to_bstring(const struct fteid_s * const fteid)
 {
@@ -117,37 +108,5 @@ void bstring_to_ip_address(bstring const bstr, ip_address_t * const ip_address)
       ;
     }
   }
-}
-
-//------------------------------------------------------------------------------
-void copy_paa(paa_t *paa_dst, paa_t *paa_src)
-{
-  memcpy(paa_dst, paa_src, sizeof(paa_t));
-}
-//------------------------------------------------------------------------------
-bstring paa_to_bstring(paa_t *paa)
-{
-  bstring bstr = NULL;
-  switch (paa->pdn_type) {
-  case IPv4:
-    bstr = blk2bstr(&paa->ipv4_address.s_addr, 4);
-    break;
-  case IPv6:
-    DevAssert (paa->ipv6_prefix_length == 64);    // NAS seems to only support 64 bits
-    bstr = blk2bstr((void*)&paa->ipv6_address + 8, paa->ipv6_prefix_length / 8);
-    break;
-  case IPv4_AND_v6:
-    DevAssert (paa->ipv6_prefix_length == 64);    // NAS seems to only support 64 bits
-    bstr = blk2bstr((void*)&paa->ipv6_address + 8, paa->ipv6_prefix_length / 8);
-    bcatblk(bstr, &paa->ipv4_address.s_addr, 4);
-    break;
-  case IPv4_OR_v6:
-    // do it like that now, TODO
-    bstr = blk2bstr(&paa->ipv4_address.s_addr, 4);
-    break;
-  default:
-    ;
-  }
-  return bstr;
 }
 

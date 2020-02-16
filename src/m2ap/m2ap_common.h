@@ -194,7 +194,7 @@ extern int asn_debug;
 extern int asn1_xer_print;
 
 # include <stdbool.h>
-# include "mme_default_values.h"
+# include "mce_default_values.h"
 # include "3gpp_23.003.h"
 # include "3gpp_24.008.h"
 # include "3gpp_33.401.h"

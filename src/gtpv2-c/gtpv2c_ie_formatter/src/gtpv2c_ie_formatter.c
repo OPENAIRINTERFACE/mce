@@ -48,6 +48,7 @@
 #include "3gpp_24.007.h"
 #include "3gpp_29.274.h"
 #include "3gpp_36.443.h"
+#include "3gpp_36.444.h"
 #include "NwGtpv2c.h"
 #include "NwGtpv2cIe.h"
 #include "NwGtpv2cMsg.h"
@@ -218,7 +219,7 @@ gtpv2c_paa_ie_get (
 
   DevAssert (paa );
   paa->pdn_type = ieValue[0] & 0x07;
-  OAILOG_DEBUG (LOG_S11, "\t- PAA type  %d\n", paa->pdn_type);
+  OAILOG_DEBUG (LOG_SM, "\t- PAA type  %d\n", paa->pdn_type);
 
   if (paa->pdn_type & 0x2) {
     char                                    ipv6_ascii[INET6_ADDRSTRLEN];
@@ -234,7 +235,7 @@ gtpv2c_paa_ie_get (
 
     memcpy (paa->ipv6_address.__in6_u.__u6_addr8, &ieValue[2], 16);
     inet_ntop (AF_INET6, &paa->ipv6_address, ipv6_ascii, INET6_ADDRSTRLEN);
-    OAILOG_DEBUG (LOG_S11, "\t- IPv6 addr %s/%u\n", ipv6_ascii, paa->ipv6_prefix_length);
+    OAILOG_DEBUG (LOG_SM, "\t- IPv6 addr %s/%u\n", ipv6_ascii, paa->ipv6_prefix_length);
   }
 
   if (paa->pdn_type == 3) {
@@ -250,7 +251,7 @@ gtpv2c_paa_ie_get (
     paa->ipv4_address.s_addr = htonl(ip);
     char ipv4[INET_ADDRSTRLEN];
     inet_ntop (AF_INET, (void*)&paa->ipv4_address, ipv4, INET_ADDRSTRLEN);
-    OAILOG_DEBUG (LOG_S11, "\t- IPv4 addr %s\n", ipv4);
+    OAILOG_DEBUG (LOG_SM, "\t- IPv4 addr %s\n", ipv4);
   }
 
   paa->pdn_type -= 1;
@@ -329,7 +330,7 @@ gtpv2c_ebi_ie_get (
 
   DevAssert (ebi );
   *ebi = ieValue[0] & 0x0F;
-  OAILOG_DEBUG (LOG_S11, "\t- EBI %u\n", *ebi);
+  OAILOG_DEBUG (LOG_SM, "\t- EBI %u\n", *ebi);
   return NW_OK;
 }
 
@@ -380,8 +381,8 @@ gtpv2c_ambr_ie_get (
   BUFFER_TO_INT32((ieValue+4), ambr->br_dl);
   ambr->br_dl *=1000;
   ambr->br_ul *=1000;
-  OAILOG_DEBUG (LOG_S11, "\t- AMBR UL %" PRIu64 "\n", ambr->br_ul);
-  OAILOG_DEBUG (LOG_S11, "\t- AMBR DL %" PRIu64 "\n", ambr->br_dl);
+  OAILOG_DEBUG (LOG_SM, "\t- AMBR UL %" PRIu64 "\n", ambr->br_ul);
+  OAILOG_DEBUG (LOG_SM, "\t- AMBR DL %" PRIu64 "\n", ambr->br_dl);
   return NW_OK;
 }
 
@@ -435,12 +436,12 @@ gtpv2c_bearer_qos_ie_get (
     bearer_qos->gbr.br_dl *=1000;
 
     if (22 < ieLength) {
-      OAILOG_ERROR (LOG_S11, "TODO gtpv2c_bearer_qos_ie_get() BearerQOS_t\n");
+      OAILOG_ERROR (LOG_SM, "TODO gtpv2c_bearer_qos_ie_get() BearerQOS_t\n");
       return NW_GTPV2C_IE_INCORRECT;
     }
     return NW_OK;
   } else {
-    OAILOG_ERROR (LOG_S11, "Bad IE length %"PRIu8"\n", ieLength);
+    OAILOG_ERROR (LOG_SM, "Bad IE length %"PRIu8"\n", ieLength);
     return NW_GTPV2C_IE_INCORRECT;
   }
 }
@@ -537,7 +538,7 @@ gtpv2c_bearer_context_created_ie_get (
         rc = gtpv2c_fteid_ie_get (ie_p->t, ntohs (ie_p->l), ie_p->i, &ieValue[read + sizeof (nw_gtpv2c_ie_tlv_t)], &bearer_context->s12_sgw_fteid);
         break;
       default:
-        OAILOG_ERROR (LOG_S11, "Received unexpected IE %u instance %u\n", ie_p->t, ie_p->i);
+        OAILOG_ERROR (LOG_SM, "Received unexpected IE %u instance %u\n", ie_p->t, ie_p->i);
         return NW_GTPV2C_IE_INCORRECT;
 
       }
@@ -553,11 +554,11 @@ gtpv2c_bearer_context_created_ie_get (
        break;
 
     case NW_GTPV2C_IE_BEARER_FLAGS:
-       OAILOG_WARNING (LOG_S11, "Received IE BEARER_FLAGS %u to implement\n", ie_p->t);
+       OAILOG_WARNING (LOG_SM, "Received IE BEARER_FLAGS %u to implement\n", ie_p->t);
       break;
 
     default:
-      OAILOG_ERROR (LOG_S11, "Received unexpected IE %u\n", ie_p->t);
+      OAILOG_ERROR (LOG_SM, "Received unexpected IE %u\n", ie_p->t);
       return NW_GTPV2C_IE_INCORRECT;
     }
 
@@ -633,7 +634,7 @@ gtpv2c_bearer_context_to_be_created_ie_get (
       break;
 
     case NW_GTPV2C_IE_BEARER_TFT:
-      OAILOG_ERROR (LOG_S11, "Received IE %u to implement\n", ie_p->t);
+      OAILOG_ERROR (LOG_SM, "Received IE %u to implement\n", ie_p->t);
       return NW_GTPV2C_IE_INCORRECT;
       break;
 
@@ -658,7 +659,7 @@ gtpv2c_bearer_context_to_be_created_ie_get (
           rc = gtpv2c_fteid_ie_get (ie_p->t, ntohs (ie_p->l), ie_p->i, &ieValue[read + sizeof (nw_gtpv2c_ie_tlv_t)], &bearer_context->s2b_u_epdg_fteid);
           break;
         default:
-          OAILOG_ERROR (LOG_S11, "Received unexpected IE %u instance %u\n", ie_p->t, ie_p->i);
+          OAILOG_ERROR (LOG_SM, "Received unexpected IE %u instance %u\n", ie_p->t, ie_p->i);
           return NW_GTPV2C_IE_INCORRECT;
 
       }
@@ -666,7 +667,7 @@ gtpv2c_bearer_context_to_be_created_ie_get (
       break;
 
     default:
-      OAILOG_ERROR (LOG_S11, "Received unexpected IE %u\n", ie_p->t);
+      OAILOG_ERROR (LOG_SM, "Received unexpected IE %u\n", ie_p->t);
       return NW_GTPV2C_IE_INCORRECT;
     }
 

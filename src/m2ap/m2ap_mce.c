@@ -70,7 +70,7 @@
 
 
 uint32_t                nb_m2ap_enb_associated 			= 0;
-static mme_ue_s1ap_id_t mce_mbms_m2ap_id_generator 	= 1;
+static mce_mbms_m2ap_id_t mce_mbms_m2ap_id_generator 	= 1;
 
 hash_table_ts_t g_m2ap_enb_coll 	= {.mutex = PTHREAD_MUTEX_INITIALIZER, 0}; // contains eNB_description_s, key is eNB_description_s.enb_id (uint32_t);
 hash_table_ts_t g_m2ap_mbms_coll 	= {.mutex = PTHREAD_MUTEX_INITIALIZER, 0}; // contains MBMS_description_s, key is MBMS_description_s.mbms_m2ap_id (uint24_t);
@@ -94,14 +94,14 @@ static int m2ap_send_init_sctp (void)
     message_p->ittiMsg.sctpInit.ipv6 = 1;
     message_p->ittiMsg.sctpInit.nb_ipv4_addr = 0;
     message_p->ittiMsg.sctpInit.nb_ipv6_addr = 0;
-    message_p->ittiMsg.sctpInit.ipv4_address[0].s_addr = mce_config.mbms.ip.mc_mce_v4.s_addr;
+    message_p->ittiMsg.sctpInit.ipv4_address[0].s_addr = mce_config.ip.mc_mce_v4.s_addr;
 
-    if (mce_config.mbms.ip.mc_mce_v4.s_addr != INADDR_ANY) {
+    if (mce_config.ip.mc_mce_v4.s_addr != INADDR_ANY) {
       message_p->ittiMsg.sctpInit.nb_ipv4_addr = 1;
     }
-    if(memcmp(&mce_config.mbms.ip.mc_mce_v6.s6_addr, (void*)&in6addr_any, sizeof(mce_config.mbms.ip.mc_mce_v6.s6_addr)) != 0) {
+    if(memcmp(&mce_config.ip.mc_mce_v6.s6_addr, (void*)&in6addr_any, sizeof(mce_config.ip.mc_mce_v6.s6_addr)) != 0) {
       message_p->ittiMsg.sctpInit.nb_ipv6_addr = 1;
-      memcpy(message_p->ittiMsg.sctpInit.ipv6_address[0].s6_addr, mce_config.mbms.ip.mc_mce_v6.s6_addr, 16);
+      memcpy(message_p->ittiMsg.sctpInit.ipv6_address[0].s6_addr, mce_config.ip.mc_mce_v6.s6_addr, 16);
     }
     /*
      * SR WARNING: ipv6 multi-homing fails sometimes for localhost.
@@ -209,12 +209,12 @@ m2ap_remove_mbms (
   mbms_ref = (mbms_description_t*)(*mbms_ref_pp);
   mce_mbms_m2ap_id = mbms_ref->mce_mbms_m2ap_id;
   /** Stop MBMS Action timer,if running. */
-  if (mbms_ref->m2ap_action_timer.id != M2AP_TIMER_INACTIVE_ID) {
-    if (timer_remove (mbms_ref->m2ap_action_timer.id, NULL)) {
+  if (mbms_ref->mxap_action_timer.id != MxAP_TIMER_INACTIVE_ID) {
+    if (timer_remove (mbms_ref->mxap_action_timer.id, NULL)) {
       OAILOG_ERROR (LOG_M2AP, "Failed to stop m2ap mbms context action timer for MBMS id  " MCE_MBMS_M2AP_ID_FMT " \n",
       		mbms_ref->mce_mbms_m2ap_id);
     }
-    mbms_ref->m2ap_action_timer.id = M2AP_TIMER_INACTIVE_ID;
+    mbms_ref->mxap_action_timer.id = MxAP_TIMER_INACTIVE_ID;
   }
   /**
    * Decrement from the eNBs the number of the MBMS services. Eventually trigger an M2AP eNB removal, depending on the eNB state.
@@ -346,38 +346,38 @@ m2ap_mce_thread (
     }
     break;
 
-    // MBMS session messages from MCE_APP task (M3 --> should trigger MBMS service for all eNB in the service area - not eNB specific).
-    case M3AP_MBMS_SESSION_START_REQUEST:{
-    	m2ap_handle_mbms_session_start_request (&M3AP_MBMS_SESSION_START_REQUEST (received_message_p));
+    // MBMS session messages from MCE_APP task (M2 --> should trigger MBMS service for all eNB in the service area - not eNB specific).
+    case M2AP_MBMS_SESSION_START_REQUEST:{
+    	m2ap_handle_mbms_session_start_request (&M2AP_MBMS_SESSION_START_REQUEST (received_message_p));
     }
     break;
 
-    case M3AP_MBMS_SESSION_STOP_REQUEST:{
-    	m2ap_handle_mbms_session_stop_request (&M3AP_MBMS_SESSION_STOP_REQUEST (received_message_p).tmgi,
-    			&M3AP_MBMS_SESSION_STOP_REQUEST (received_message_p).mbms_service_area_id,
-				&M3AP_MBMS_SESSION_STOP_REQUEST (received_message_p).inform_enbs);
+    case M2AP_MBMS_SESSION_STOP_REQUEST:{
+    	m2ap_handle_mbms_session_stop_request (&M2AP_MBMS_SESSION_STOP_REQUEST (received_message_p).tmgi,
+    			&M2AP_MBMS_SESSION_STOP_REQUEST (received_message_p).mbms_service_area_id,
+				&M2AP_MBMS_SESSION_STOP_REQUEST (received_message_p).inform_enbs);
     }
     break;
 
-    case M3AP_MBMS_SESSION_UPDATE_REQUEST:{
-    	m2ap_handle_mbms_session_update_request (&M3AP_MBMS_SESSION_UPDATE_REQUEST (received_message_p));
+    case M2AP_MBMS_SESSION_UPDATE_REQUEST:{
+    	m2ap_handle_mbms_session_update_request (&M2AP_MBMS_SESSION_UPDATE_REQUEST (received_message_p));
     }
     break;
     // ToDo: Leave the stats collection in the M2AP layer for now.
 
-    case M3AP_ENB_SETUP_RESPONSE:{
+    case M2AP_ENB_SETUP_RESPONSE:{
     	/*
     	 * New message received from MCE_APP task.
     	 */
-    	m2ap_handle_m3ap_enb_setup_res(&M3AP_ENB_SETUP_RESPONSE(received_message_p));
+    	m2ap_handle_m2ap_enb_setup_res(&M2AP_ENB_SETUP_RESPONSE(received_message_p));
     }
     break;
 
-    case M3AP_MBMS_SCHEDULING_INFORMATION:{
+    case M2AP_MBMS_SCHEDULING_INFORMATION:{
     	/*
     	 * Handle new MBMS Scheduling Information
     	 */
-    	m2ap_handle_m3ap_mbms_scheduling_info(&M3AP_MBMS_SCHEDULING_INFORMATION(received_message_p));
+    	m2ap_handle_m2ap_mbms_scheduling_info(&M2AP_MBMS_SCHEDULING_INFORMATION(received_message_p));
     }
     break;
 
@@ -412,8 +412,8 @@ m2ap_mce_thread (
     }
     break;
 
-    case M3AP_ENB_INITIATED_RESET_ACK:{
-    	m3ap_handle_enb_initiated_reset_ack (&M3AP_ENB_INITIATED_RESET_ACK (received_message_p));
+    case M2AP_ENB_INITIATED_RESET_ACK:{
+    	m2ap_handle_enb_initiated_reset_ack (&M2AP_ENB_INITIATED_RESET_ACK (received_message_p));
     }
     break;
 
@@ -428,7 +428,7 @@ m2ap_mce_thread (
     	    break;
     	  }
     	  OAILOG_WARNING (LOG_M2AP, "Processing expired timer with id 0x%lx for MBMS M2AP Id "MCE_MBMS_M2AP_ID_FMT " with m2ap_mbms_action_timer_id 0x%lx !\n",
-   			  received_message_p->ittiMsg.timer_has_expired.timer_id, mbms_ref_p->mce_mbms_m2ap_id, mbms_ref_p->m2ap_action_timer.id);
+   			  received_message_p->ittiMsg.timer_has_expired.timer_id, mbms_ref_p->mce_mbms_m2ap_id, mbms_ref_p->mxap_action_timer.id);
     	  m2ap_mce_handle_mbms_action_timer_expiry (mbms_ref_p);
     	}
     	/* TODO - Commenting out below function as it is not used as of now.
@@ -483,13 +483,13 @@ m2ap_mce_init(void)
 
   /** Free the M2AP eNB list. */
   bstring bs1 = bfromcstr("m2ap_eNB_coll");
-  hash_table_ts_t* h = hashtable_ts_init (&g_m2ap_enb_coll, mce_config.mbms.max_m2_enbs, NULL, m2ap_remove_enb, bs1); /**< Use a better removal handler. */
+  hash_table_ts_t* h = hashtable_ts_init (&g_m2ap_enb_coll, mce_config.max_m2_enbs, NULL, m2ap_remove_enb, bs1); /**< Use a better removal handler. */
   bdestroy_wrapper (&bs1);
   if (!h) return RETURNerror;
 
   /** Free all MBMS Services and clear the association list. */
   bs1 = bfromcstr("m2ap_MBMS_coll");
-  h = hashtable_ts_init (&g_m2ap_mbms_coll, mce_config.mbms.max_mbms_services, NULL, m2ap_remove_mbms, bs1); /**< Use a better removal handler. */
+  h = hashtable_ts_init (&g_m2ap_mbms_coll, mce_config.max_mbms_services, NULL, m2ap_remove_mbms, bs1); /**< Use a better removal handler. */
   bdestroy_wrapper (&bs1);
   if (!h) return RETURNerror;
 
@@ -718,8 +718,8 @@ m2ap_is_mbms_tmgi_in_list (
   const tmgi_t * const tmgi, const mbms_service_area_id_t mbms_sai)
 {
   mbms_description_t                     *mbms_ref = NULL;
-  m2ap_tmgi_t						   	  m2ap_tmgi = {.tmgi = *tmgi, .mbms_service_area_id_t = mbms_sai};
-  m2ap_tmgi_t				 	 		 *m2ap_tmgi_p = &m2ap_tmgi;
+  mxap_tmgi_t						   	  m2ap_tmgi = {.tmgi = *tmgi, .mbms_service_area_id_t = mbms_sai};
+  mxap_tmgi_t				 	 		 *m2ap_tmgi_p = &m2ap_tmgi;
 
   hashtable_ts_apply_callback_on_elements((hash_table_ts_t * const)&g_m2ap_mbms_coll, m2ap_mbms_compare_by_tmgi_cb, (void*)m2ap_tmgi_p, (void**)&mbms_ref);
   if (mbms_ref) {
@@ -785,7 +785,7 @@ m2ap_new_mbms (
    * Create and initialize the SCTP eNB MBMS M2aP Id map.
    */
   bstring bs2 = bfromcstr("m2ap_assoc_id2enb_mbms_id_coll");
-  hash_table_uint64_ts_t* h = hashtable_uint64_ts_init (&mbms_ref->g_m2ap_assoc_id2mce_enb_id_coll, mce_config.mbms.max_m2_enbs, NULL, bs2);
+  hash_table_uint64_ts_t* h = hashtable_uint64_ts_init (&mbms_ref->g_m2ap_assoc_id2mce_enb_id_coll, mce_config.max_m2_enbs, NULL, bs2);
   bdestroy_wrapper (&bs2);
   if(!h){
   	free_wrapper(&mbms_ref);
@@ -813,20 +813,20 @@ m2ap_set_embms_cfg_item (m2ap_enb_description_t * const m2ap_enb_ref,
 		M2AP_MBMS_Service_Area_t * mbms_sa = &mbms_service_areas->list.array[j];
 		OCTET_STRING_TO_MBMS_SA (mbms_sa, mbms_sa_value);
 		 /** Check if it is a global MBMS SAI. */
-		if(mbms_sa_value <= mce_config.mbms.mbms_global_service_area_types) {
+		if(mbms_sa_value <= mce_config.mbms_global_service_area_types) {
 			/** Global MBMS Service Area Id received. */
-			OAILOG_INFO(LOG_MME_APP, "Found a matching global MBMS Service Area ID " MBMS_SERVICE_AREA_ID_FMT ". \n", mbms_sa_value);
+			OAILOG_INFO(LOG_MCE_APP, "Found a matching global MBMS Service Area ID " MBMS_SERVICE_AREA_ID_FMT ". \n", mbms_sa_value);
 			m2ap_enb_ref->mbms_sa_list.serviceArea[m2ap_enb_ref->mbms_sa_list.num_service_area] = mbms_sa_value;
 			m2ap_enb_ref->mbms_sa_list.num_service_area++;
 			/** No need to check other values, directly check new config value. */
 			break;
 		}
 		/** Check if it is in bounds for the local service areas. */
-		int val = mbms_sa_value - mce_config.mbms.mbms_global_service_area_types + 1;
-		int local_area = val / mce_config.mbms.mbms_local_service_area_types;
-		int local_area_type = val % mce_config.mbms.mbms_local_service_area_types;
-		if(local_area < mce_config.mbms.mbms_local_service_areas){
-			OAILOG_INFO(LOG_MME_APP, "Found a valid MBMS Service Area ID " MBMS_SERVICE_AREA_ID_FMT ". \n", mbms_sa_value);
+		int val = mbms_sa_value - mce_config.mbms_global_service_area_types + 1;
+		int local_area = val / mce_config.mbms_local_service_area_types;
+		int local_area_type = val % mce_config.mbms_local_service_area_types;
+		if(local_area < mce_config.mbms_local_service_areas){
+			OAILOG_INFO(LOG_MCE_APP, "Found a valid MBMS Service Area ID " MBMS_SERVICE_AREA_ID_FMT ". \n", mbms_sa_value);
 			m2ap_enb_ref->mbms_sa_list.serviceArea[m2ap_enb_ref->mbms_sa_list.num_service_area] = mbms_sa_value;
 			m2ap_enb_ref->mbms_sa_list.num_service_area++;
 			break;

@@ -24,12 +24,10 @@
 #include "timer_messages_def.h"
 
 // Messages files used between tasks
-#include "ip_forward_messages_def.h"
 #include "sctp_messages_def.h"
 #include "udp_messages_def.h"
-#include "scenario_player_messages_def.h"
 #include "async_system_messages_def.h"
 
-// todo: separate messages_def for MBMS
 #include "sm_messages_def.h"
+#include "m2ap_messages_def.h"
 #include "m3ap_messages_def.h"

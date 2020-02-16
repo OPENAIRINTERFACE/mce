@@ -87,8 +87,27 @@ void update_mce_app_stats_connected_m2ap_enb_sub(void)
   return;
 }
 
+// Number of Connected external MCEs
+void update_mme_app_stats_connected_m3ap_mce_add(void)
+{
+  mce_stats_write_lock (&mce_app_desc);
+  (mce_app_desc.nb_m3ap_mce_connected)++;
+  (mce_app_desc.nb_m3ap_mce_connected_since_last_stat)++;
+  mce_stats_unlock(&mce_app_desc);
+  return;
+}
+void update_mme_app_stats_connected_m3ap_mce_sub(void)
+{
+  mce_stats_write_lock (&mce_app_desc);
+  if (mce_app_desc.nb_m3ap_mce_connected !=0)
+    (mce_app_desc.nb_m3ap_mce_connected)--;
+  (mce_app_desc.nb_m3ap_mce_released_since_last_stat)--;
+  mce_stats_unlock(&mce_app_desc);
+  return;
+}
+
 /*****************************************************/
-// Number of Connected UEs
+// Number of active MBMS Services
 void update_mce_app_stats_mbms_services_add(void)
 {
   mce_stats_write_lock (&mce_app_desc);

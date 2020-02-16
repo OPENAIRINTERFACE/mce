@@ -168,7 +168,7 @@ void* shared_log_task (__attribute__ ((unused)) void *args_p)
   MessageDef                             *received_message_p = NULL;
   long                                    timer_id = -1;
   int                                     rc = 0;
-  int                                     exit_count = 2;
+  int                                     exit_count = 1;
 
   itti_mark_task_ready (TASK_SHARED_TS_LOG);
   shared_log_start_use ();

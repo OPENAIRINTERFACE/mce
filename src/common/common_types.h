@@ -240,9 +240,6 @@ typedef struct paa_s{
   uint8_t ipv6_prefix_length;
 } paa_t;
 
-void copy_paa(paa_t *paa_dst, paa_t *paa_src);
-bstring paa_to_bstring(paa_t *paa);
-
 //-----------------
 typedef struct {
   pdn_type_value_t pdn_type;

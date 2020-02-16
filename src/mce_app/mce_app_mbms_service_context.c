@@ -438,7 +438,7 @@ mbms_cteid_in_list (const mce_mbms_services_t * const mce_mbms_services_p,
 //   */
 //  S1AP_ENB_INITIATED_RESET_ACK (message_p).ue_to_reset_list = enb_reset_req->ue_to_reset_list;
 //  enb_reset_req->ue_to_reset_list = NULL;
-//  itti_send_msg_to_task (TASK_S1AP, INSTANCE_DEFAULT, message_p);
+//  itti_send_msg_to_task (TASK_M2AP, INSTANCE_DEFAULT, message_p);
 //  OAILOG_DEBUG (LOG_MCE_APP, " Reset Ack sent to S1AP. eNB id = %d, reset_type  %d \n ", enb_reset_req->enb_id, enb_reset_req->s1ap_reset_type);
 //  OAILOG_FUNC_OUT (LOG_MCE_APP);
 //}
@@ -501,7 +501,7 @@ void mce_app_calculate_mbms_service_mcch_periods(const long abs_start_time_in_se
   long start_delta_from_last_mcch_rep_msec  = (abs_start_time_in_sec 	- mce_app_desc.mcch_repetition_period_tv.tv_sec) * 1000;
   long start_delta_from_last_mcch_rep_usec 	= abs_start_time_usec 		- mce_app_desc.mcch_repetition_period_tv.tv_usec;
   /** Divide to length of MCCH repetition period. */
-  long mcch_rep_time_msec 	= mce_config.mbms.mbms_mcch_repetition_period_rf * 10; /**< Calculate in terms of milliseconds. */
+  long mcch_rep_time_msec 	= mce_config.mbms_mcch_repetition_period_rf * 10; /**< Calculate in terms of milliseconds. */
   /** Divide and ceil to get the delta of MCCH repetition periods. */
   int start_delta_mcch_rep 	= min((start_delta_from_last_mcch_rep_msec / mcch_rep_time_msec), 1);
 
@@ -513,7 +513,7 @@ void mce_app_calculate_mbms_service_mcch_periods(const long abs_start_time_in_se
   int stop_delta_mcch_rep = min((stop_delta_from_last_mcch_rep_msec / mcch_rep_time_msec), 1) ;
 
   /** Check the next MBSFN Modification MCCH repetition number. */
-  int mbsfn_mod_factor = mbsfn_area_mcch_modif_period_rf / mce_config.mbms.mbms_mcch_repetition_period_rf;
+  int mbsfn_mod_factor = mbsfn_area_mcch_modif_period_rf / mce_config.mbms_mcch_repetition_period_rf;
   int mcch_modif_period_current = mce_app_desc.mcch_repetition_period / mbsfn_mod_factor; /**< Take lower value. */
   /**
    * MBMS Service Start and Stop MCCH modification periods.

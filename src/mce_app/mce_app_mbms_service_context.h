@@ -46,6 +46,7 @@
 #include "common_types_mbms.h"
 #include "mce_app_bearer_context.h"
 #include "sm_messages_types.h"
+#include "m2ap_messages_types.h"
 #include "m3ap_messages_types.h"
 #include "mce_app_procedures.h"
 //#include "security_types.h"
@@ -168,6 +169,13 @@ typedef struct mbsfn_area_context_s {
 	   * No other way, since we need to count the #eNB per MBSFN area, too.
 	   */
 	  hash_table_uint64_ts_t  * m2_enb_id_hashmap;
+
+	  // todo: fill for M3
+	  /**
+	   * Need a hashmap for the M3 MEC Id.
+	   * No other way, since we need to count the #MCE per MBSFN area, too.
+	   */
+	  hash_table_uint64_ts_t  * m3_mce_id_hashmap;
 
 	  /**
 	   * Need another hashmap for the MBMS services in the given MBSFN area context.

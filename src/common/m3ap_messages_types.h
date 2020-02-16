@@ -30,60 +30,51 @@
 #ifndef FILE_M3AP_MESSAGES_TYPES_SEEN
 #define FILE_M3AP_MESSAGES_TYPES_SEEN
 
+#include "mxap_messages_types.h"
+
 #define M3AP_MBMS_SESSION_START_REQUEST(mSGpTR)                  (mSGpTR)->ittiMsg.m3ap_mbms_session_start_req
 #define M3AP_MBMS_SESSION_UPDATE_REQUEST(mSGpTR)                 (mSGpTR)->ittiMsg.m3ap_mbms_session_update_req
 #define M3AP_MBMS_SESSION_STOP_REQUEST(mSGpTR)                   (mSGpTR)->ittiMsg.m3ap_mbms_session_stop_req
 
-#define M3AP_ENB_SETUP_REQUEST(mSGpTR)		                   		 (mSGpTR)->ittiMsg.m3ap_enb_setup_req
-#define M3AP_ENB_SETUP_RESPONSE(mSGpTR)   	                		 (mSGpTR)->ittiMsg.m3ap_enb_setup_res
-#define M3AP_MBMS_SCHEDULING_INFORMATION(mSGpTR)             		 (mSGpTR)->ittiMsg.m3ap_mbms_scheduling_info
+#define M3AP_MCE_SETUP_REQUEST(mSGpTR)		                   		 (mSGpTR)->ittiMsg.m3ap_mce_setup_req
+#define M3AP_MCE_SETUP_RESPONSE(mSGpTR)   	                		 (mSGpTR)->ittiMsg.m3ap_mce_setup_res
 
-#define MCE_APP_M3_MBMS_SERVICE_COUNTING_REQ(mSGpTR)						 (mSGpTR)->ittiMsg.m3ap_mbms_service_counting_req
-#define M3AP_ENB_INITIATED_RESET_REQ(mSGpTR)                		 (mSGpTR)->ittiMsg.m3ap_initiated_reset_req
-#define M3AP_ENB_INITIATED_RESET_ACK(mSGpTR)                		 (mSGpTR)->ittiMsg.m3ap_enb_initiated_reset_ack
+#define M3AP_MCE_INITIATED_RESET_REQ(mSGpTR)                		 (mSGpTR)->ittiMsg.m3ap_mce_initiated_reset_req
+#define M3AP_MCE_INITIATED_RESET_ACK(mSGpTR)                		 (mSGpTR)->ittiMsg.m3ap_mce_initiated_reset_ack
+
+#define M3AP_MCE_CONFIG_UPDATE(mSGpTR)                		 			 (mSGpTR)->ittiMsg.m3ap_mce_config_update
 
 // List of possible causes for MME generated UE context release command towards eNB
-enum m2cause {
-  M2AP_INVALID_CAUSE = 0,
-  M2AP_NAS_NORMAL_RELEASE,
-  M2AP_NAS_DETACH,
-  M2AP_RADIO_EUTRAN_GENERATED_REASON,
-  M2AP_IMPLICIT_CONTEXT_RELEASE,
-  M2AP_INITIAL_CONTEXT_SETUP_FAILED,
-  M2AP_SCTP_SHUTDOWN_OR_RESET,
+enum m3cause {
+  M3AP_INVALID_CAUSE = 0,
+  M3AP_NAS_NORMAL_RELEASE,
+  M3AP_NAS_DETACH,
+  M3AP_RADIO_EUTRAN_GENERATED_REASON,
+  M3AP_IMPLICIT_CONTEXT_RELEASE,
+  M3AP_INITIAL_CONTEXT_SETUP_FAILED,
+  M3AP_SCTP_SHUTDOWN_OR_RESET,
 
-  M2AP_HANDOVER_CANCELLED,
-  M2AP_HANDOVER_FAILED,
-  M2AP_NETWORK_ERROR,
-  M2AP_SYSTEM_FAILURE,
+  M3AP_HANDOVER_CANCELLED,
+  M3AP_HANDOVER_FAILED,
+  M3AP_NETWORK_ERROR,
+  M3AP_SYSTEM_FAILURE,
 
-  M2AP_INVALIDATE_NAS,  /**< Removing the NAS layer only. */
+  M3AP_INVALIDATE_NAS,  /**< Removing the NAS layer only. */
 
-  M2AP_SUCCESS
+  M3AP_SUCCESS
 };
 
-typedef enum m2ap_reset_type_e {
-  M2AP_RESET_ALL = 0,
-  M2AP_RESET_PARTIAL
-} m2ap_reset_type_t;
-
-typedef struct m2_sig_conn_id_s {
-  mce_mbms_m2ap_id_t   mce_mbms_m2ap_id;
-  enb_mbms_m2ap_id_t   enb_mbms_m2ap_id;
-} m2_sig_conn_id_t;
-
-//-----------------
-typedef struct mbms_bearer_context_to_be_created_s {
-  struct bearer_context_to_be_created_s 		bc_tbc;
-  struct mbms_ip_multicast_distribution_s 		mbms_ip_mc_dist;
-} mbms_bearer_context_to_be_created_t;
+typedef struct m3_sig_conn_id_s {
+  mme_mbms_m3ap_id_t   mme_mbms_m3ap_id;
+  mce_mbms_m3ap_id_t   mce_mbms_m3ap_id;
+} m3_sig_conn_id_t;
 
 //------------------------------------------------------------------------------
 typedef struct itti_m3ap_mbms_session_start_req_s {
   tmgi_t									tmgi;
   mbms_service_area_id_t					mbms_service_area_id;
   mbms_bearer_context_to_be_created_t	    mbms_bearer_tbc;
-  // todo: handle timer better --> Removal of current time should be done in M2AP layer
+  // todo: handle timer better --> Removal of current time should be done in M3AP layer
   uint32_t									abs_start_time_sec;  /**< Will be handled in the MCE_APP layer. */
   uint32_t									abs_start_time_usec;  /**< Will be handled in the MCE_APP layer. */
 } itti_m3ap_mbms_session_start_req_t;
@@ -100,59 +91,53 @@ typedef struct itti_m3ap_mbms_session_update_req_s {
 
 //------------------------------------------------------------------------------
 typedef struct itti_m3ap_mbms_session_stop_req_s {
-  tmgi_t 				    		tmgi;           //< MBMS Service TMGI.
-  mbms_service_area_id_t			mbms_service_area_id;
-  bool								inform_enbs;
+  tmgi_t 				    				tmgi;           //< MBMS Service TMGI.
+  mbms_service_area_id_t		mbms_service_area_id;
+  bool											inform_mces;
 } itti_m3ap_mbms_session_stop_req_t;
 
 //------------------------------------------------------------------------------
-typedef struct itti_m3ap_enb_setup_req_s {
+typedef struct itti_m3ap_mce_setup_req_s {
   sctp_assoc_id_t		    		sctp_assoc;
   mbms_service_area_t				mbms_service_areas;
-  uint32_t									m2ap_enb_id;
-} itti_m3ap_enb_setup_req_t;
+  uint32_t									m3ap_mce_global_id;
+} itti_m3ap_mce_setup_req_t;
 
 //------------------------------------------------------------------------------
-typedef struct itti_m3ap_enb_setup_res_s {
-	uint32_t								  m2_enb_id;
+typedef struct itti_m3ap_mce_setup_res_s {
+	uint32_t								  m3_mce_global_id;
 	uint8_t										local_mbms_area;
   sctp_assoc_id_t		    		sctp_assoc;
   mbsfn_areas_t		  				mbsfn_areas;
-} itti_m3ap_enb_setup_res_t;
-
-typedef struct itti_m3ap_mbms_scheduling_info_s {
-	/** First one is the global MBMS service area, remaining ones are the local MBMS service areas. */
-  mbsfn_areas_t		  				mbsfn_cluster[MME_CONFIG_MAX_LOCAL_MBMS_SERVICE_AREAS + 1];
-  long 											mcch_rep_abs_rf;
-}itti_m3ap_mbms_scheduling_info_t;
+} itti_m3ap_mce_setup_res_t;
 
 //------------------------------------------------------------------------------
-typedef struct itti_m3ap_enb_initiated_reset_req_s {
+typedef struct itti_m3ap_mce_initiated_reset_req_s {
   uint32_t          sctp_assoc_id;
   uint16_t          sctp_stream_id;
-  uint32_t          enb_id;
-  m2ap_reset_type_t  s1ap_reset_type;
+  uint32_t          mce_id;
+  mxap_reset_type_t  m3ap_reset_type;
   uint32_t          num_mbms;
-  m2_sig_conn_id_t  *ue_to_reset_list;
-} itti_m3ap_enb_initiated_reset_req_t;
+  m3_sig_conn_id_t  *mbms_to_reset_list;
+} itti_m3ap_mce_initiated_reset_req_t;
 
 //------------------------------------------------------------------------------
-typedef struct itti_m3ap_enb_initiated_reset_ack_s {
+typedef struct itti_m3ap_mce_initiated_reset_ack_s {
   uint32_t          sctp_assoc_id;
   uint16_t          sctp_stream_id;
-  m2ap_reset_type_t m2ap_reset_type;
+  mxap_reset_type_t m3ap_reset_type;
   uint32_t          num_mbms;
-  m2_sig_conn_id_t  *mbsm_to_reset_list;
-} itti_m3ap_enb_initiated_reset_ack_t;
+  m3_sig_conn_id_t  *mbsm_to_reset_list;
+} itti_m3ap_mce_initiated_reset_ack_t;
 
-/** M3AP MBMS Service Counting Request. */
-typedef struct itti_m3ap_mbms_service_counting_req_s {
-  mce_mbms_m2ap_id_t      mce_mbms_m2ap_id:24;
-  enb_mbms_m2ap_id_t      enb_mbms_m2ap_id;
+//------------------------------------------------------------------------------
+/** M3AP MCE Configuration Update. */
+typedef struct itti_m3ap_mce_config_update_s {
+  mme_mbms_m3ap_id_t      mme_mbms_m3ap_id;
+  mce_mbms_m3ap_id_t      mce_mbms_m3ap_id;
   sctp_assoc_id_t         assoc_id;
-  uint32_t                enb_id;
-  enum m2cause            cause;
-}itti_m3ap_mbms_service_counting_req_t;
-
+  uint32_t                global_mce_id;
+  enum m3cause            cause;
+}itti_m3ap_mce_config_update_t;
 
 #endif /* FILE_M3AP_MESSAGES_TYPES_SEEN */
